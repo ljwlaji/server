@@ -38,7 +38,6 @@ public:
 	void OutWarning(const char* args, ...);
 	void OutSuccess(const char* args, ...);
 	void OutExecption(const char* args, ...);
-	void OnStart();
 	void SetColor(LogColor _color);
 	void ReSetColor();
 	void OnUpdate(uint32 diff);

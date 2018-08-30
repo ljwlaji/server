@@ -5,7 +5,10 @@ class LogRunnable : public Runnable<Log>
 {
 public:
 	LogRunnable() {}
-	~LogRunnable() {}
+	~LogRunnable() 
+	{
+		
+	}
 
 	virtual void Start()
 	{
@@ -29,11 +32,16 @@ private:
 			m_TotalDiffTime += m_DiffTime;
 			if (m_UpdateCount >= 100)
 			{
-				printf("Update Diff %d: ", (int)(m_TotalDiffTime / m_UpdateCount));
+				printf("Update Diff %d \n", (int)(m_TotalDiffTime / m_UpdateCount));
 				m_UpdateCount = 0;
 				m_TotalDiffTime = 0;
 			}
 			Begin += Diff;
 		}
+	}
+
+	virtual void OnStoped()
+	{
+	
 	}
 };

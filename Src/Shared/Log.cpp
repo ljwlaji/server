@@ -62,13 +62,6 @@ void Log::OutWarning(const char* args, ...)
 	m_addlist.PushBack(SignleLog(Cmd_Yellow, ___F(args)));
 }
 
-void Log::OnStart()
-{
-	SetColor(Cmd_Pink);
-	OutLog("日志服务启动");
-	ReSetColor();
-}
-
 void Log::ReSetColor()
 {
 	SetColor(Cmd_Normal);

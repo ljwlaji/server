@@ -55,42 +55,20 @@ bool SocketServer::Init(const char* Ip, const unsigned short Port)
 
 bool SocketServer::Start()
 {
-	std::list<NetWorkRunnable*> threads;
 	for (int i = 0; i < GetThreadCount(); i++)
 	{
 		NetWorkRunnable* th = new NetWorkRunnable(i);
 		th->Start();
-		threads.push_back(th);
+		m_Threads.push_back(th);
 	}
 	while (true)
 	{
-		//5.接收请求，当收到请求后，会将客户端的信息存入clientAdd这个结构体中，并返回描述这个TCP连接的Socket  
+		//5.接收请求，当收到请求后，会将客户端的信息存入clientAdd这个结构体中，并返回描述这个TCP连接的Socket
 		SOCKET sockConn = Accept();
 		if (sockConn == INVALID_SOCKET)
 		{
-			sLog->OutBug("套接字服务端监听失败,错误代码 :%d", GetLastError());
+			sLog->OutBug(___F("套接字服务端监听失败,错误代码 :%d", GetLastError()));
 			continue;
-		}
-		bool AllFull = true;
-		for (std::list<NetWorkRunnable*>::iterator i = threads.begin(); i != threads.end(); i++)
-		{
-
-			if (!(*i)->IsFull())
-			{
-				(*i)->InsertSocket(sockConn);
-				struct sockaddr_in sa;
-				int len = sizeof(sa);
-				if (!getpeername(sockConn, (sockaddr*)&sa, &len))
-				sLog->OutLog("新连接接入 %d", sockConn);
-				//OnNewSocketComming(sockConn, i);
-				AllFull = false;
-				break;
-			}
-		}
-
-		if (AllFull)
-		{
-			printf("ALL FULL");
 		}
 	}
 	return true;
@@ -133,27 +111,24 @@ SOCKET SocketServer::Accept()
 	}
 	else
 	{
-		bool AllFull = true;
-		/*
-		for (int i = 0; i < GetThreadCount(); i++)
+		for (std::list<NetWorkRunnable*>::iterator i = m_Threads.begin(); i != m_Threads.end(); i++)
 		{
 
-			if (!SocketListVector.at(i)->IsFull())
+			if (!(*i)->IsFull())
 			{
-				SocketList* TempList = SocketListVector.at(i);
-				TempList->insertSocket(socket_connection);
-				AllFull = false;
-				break;
+				(*i)->InsertSocket(socket_connection);
+				struct sockaddr_in sa;
+				int len = sizeof(sa);
+				if (!getpeername(socket_connection, (sockaddr*)&sa, &len))
+				{
+					sLog->OutLog(___F("新连接接入 %d", socket_connection));
+					return socket_connection;
+				}
+				
 			}
 		}
-		*/
-
-		if (AllFull)
-		{
-			return INVALID_SOCKET;
-		}
 	}
-	return socket_connection;
+	return INVALID_SOCKET;
 }
 void SocketServer::CleanUpAndDelete()
 {

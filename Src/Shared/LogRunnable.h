@@ -30,7 +30,7 @@ private:
 			sLog->OnUpdate(m_DiffTime);
 			m_UpdateCount++;
 			m_TotalDiffTime += m_DiffTime;
-			if (m_UpdateCount >= 100)
+			if (m_UpdateCount >= 1000)
 			{
 				printf("Update Diff %d \n", (int)(m_TotalDiffTime / m_UpdateCount));
 				m_UpdateCount = 0;

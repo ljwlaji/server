@@ -33,11 +33,11 @@ class Log
 public:
 	static std::string format(const char* args, ...);
 	static Log* GetInstance();
-	void OutBug(const char* args, ...);
-	void OutLog(const char* args, ...);
-	void OutWarning(const char* args, ...);
-	void OutSuccess(const char* args, ...);
-	void OutExecption(const char* args, ...);
+	void OutBug(std::string args);
+	void OutLog(std::string args);
+	void OutWarning(std::string args);
+	void OutSuccess(std::string args);
+	void OutExecption(std::string args);
 	void SetColor(LogColor _color);
 	void ReSetColor();
 	void OnUpdate(uint32 diff);

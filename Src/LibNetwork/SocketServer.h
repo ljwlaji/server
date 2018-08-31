@@ -24,8 +24,11 @@
 #define SocketForSingleThread 512
 
 #include <vector>
+#include <list>
 #include <atomic>
 #include <mutex>
+
+class NetWorkRunnable;
 #define ThreadLocker std::lock_guard<std::mutex>
 class SocketServer
 {
@@ -50,4 +53,5 @@ private:
 	unsigned long m_Ip;
 	unsigned short m_Port;
 	std::atomic<bool> m_IsBinded;
+	std::list<NetWorkRunnable*> m_Threads;
 };

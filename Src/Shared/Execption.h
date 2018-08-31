@@ -20,7 +20,7 @@ public:
 
 	void Out()
 	{
-		sLog->OutExecption("%s Catched Execption:\n in <%s> at Line %d:\n Method: %s", m_Date.c_str(), m_ExecptionDesc.c_str(), m_FileName.c_str(), m_Line, m_Function.c_str());
+		sLog->OutExecption(___F("%s Catched Execption:\n in <%s> at Line %d:\n Method: %s", m_Date.c_str(), m_ExecptionDesc.c_str(), m_FileName.c_str(), m_Line, m_Function.c_str()));
 	}
 private:
 	std::string m_ExecptionDesc;

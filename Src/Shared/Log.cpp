@@ -13,17 +13,13 @@ std::string Log::format(const char* args, ...)
 {
 	std::string ret = "";
 	va_list ap;
-	char szQuery[1024];
+	char szQuery[4096];
 	va_start(ap, args);
-	int ares = vsnprintf(szQuery, 1024, args, ap);
+	int ares = vsnprintf(szQuery, 4096, args, ap);
 	va_end(ap);
-
 	if (ares == -1)
 		_ASSERT(false);
-
-	ret = szQuery;
-
-	return ret;
+	return szQuery;
 }
 
 Log * Log::GetInstance()
@@ -37,29 +33,29 @@ Log * Log::GetInstance()
 	return _log;
 }
 
-void Log::OutBug(const char* args, ...)
+void Log::OutBug(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Red, ___F(args)));
+	m_addlist.PushBack(SignleLog(Cmd_Red, args));
 }
 
-void Log::OutLog(const char* args, ...)
+void Log::OutLog(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_White, ___F(args)));
+	m_addlist.PushBack(SignleLog(Cmd_White, args));
 }
 
-void Log::OutSuccess(const char* args, ...)
+void Log::OutSuccess(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Green, ___F(args)));
+	m_addlist.PushBack(SignleLog(Cmd_Green, args));
 }
 
-void Log::OutExecption(const char* args, ...)
+void Log::OutExecption(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Pink, ___F(args)));
+	m_addlist.PushBack(SignleLog(Cmd_Pink, args));
 }
 
-void Log::OutWarning(const char* args, ...)
+void Log::OutWarning(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Yellow, ___F(args)));
+	m_addlist.PushBack(SignleLog(Cmd_Yellow, args));
 }
 
 void Log::ReSetColor()

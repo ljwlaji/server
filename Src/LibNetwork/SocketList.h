@@ -1,11 +1,16 @@
 #pragma once
-
+#include <ShareDefine.h>
 #include <SocketServer.h>
+#include <atomic>
+#include <map>
+#include <unordered_map>
+#include <atomic>
 struct SocketList
 {
 private:
-	int num;//记录socket的真实数目  
-	SOCKET socketArray[SocketForSingleThread];//存放socket的数组  
+	std::atomic<uint32> m_Size;
+	
+	SOCKET socketArray[SocketForSingleThread];//存放socket的数组
 	std::mutex ListLock;
 	unsigned char m_Page;
 public:
@@ -22,4 +27,9 @@ public:
 	unsigned char GetPage() { return m_Page; }
 	//将socketArray中的套接字放入fd_list这个结构体中  
 	void makefd(fd_set * fd_list);
+
+	uint32 GetSize() 
+	{
+		return m_Size; 
+	}
 };

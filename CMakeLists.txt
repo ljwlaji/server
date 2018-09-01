@@ -9,7 +9,7 @@ include(CheckIncludeFiles)
 
 # set macro-directory
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/macros")
-SET(CMAKE_CXX_FLAGS "-std=c++0x")
+SET(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
 # set default buildoptions and print them
 include(cmake/options.cmake)
 

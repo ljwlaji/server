@@ -6,9 +6,10 @@
 #include <WinSock2.h>
 #pragma comment(lib, "ws2_32.lib")
 #else
-#include<unistd.h> //uni std
-#include<arpa/inet.h>
-#include<string.h>
+#include <unistd.h> //uni std
+#include <arpa/inet.h>
+#include <string.h>
+#include <sys/socket.h>
 
 #define SOCKET int
 #define INVALID_SOCKET  (SOCKET)(~0)

@@ -71,7 +71,9 @@ bool SocketServer::Start()
 		SOCKET sockConn = Accept();
 		if (sockConn == INVALID_SOCKET)
 		{
+#ifdef WIN32
 			sLog->OutBug(___F("套接字服务端监听失败,错误代码 :%d", GetLastError()));
+#endif
 			continue;
 		}
 	}

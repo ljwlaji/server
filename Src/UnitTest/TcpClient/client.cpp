@@ -22,7 +22,7 @@ void cmdThread()
 
 void StartTask()
 {
-	const int cCount = 2500;
+	const int cCount = 50;
 	EasyTcpClient* client[cCount];
 
 	for (int n = 0; n < cCount; n++)
@@ -39,7 +39,8 @@ void StartTask()
 		{
 			return;
 		}
-		client[n]->Connect("192.168.2.1", 9876);
+		//"192.168.2.1"
+		client[n]->Connect("127.0.0.1", 9876);
 		printf("Connect=%d\n", n);
 	}
 
@@ -57,6 +58,7 @@ void StartTask()
 
 	for (int n = 0; n < cCount; n++)
 	{
+		Sleep(1);
 		client[n]->Close();
 	}
 }

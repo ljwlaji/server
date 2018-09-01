@@ -1,7 +1,6 @@
 #include <SocketServer.h>
 #include <Execption.h>
 #include <Runnable.h>
-#include <ThreadPool.h>
 #include <NetworkRunnable.h>
 #ifndef WIN32
 #include <errno.h>
@@ -57,27 +56,41 @@ bool SocketServer::Init(const char* Ip, const unsigned short Port)
 	return true;
 }
 
-bool SocketServer::Start()
+void SocketServer::Start()
 {
-	for (int i = 0; i < GetThreadCount(); i++)
-	{
-		NetWorkRunnable* th = new NetWorkRunnable(i);
-		th->Start();
-		m_Threads.push_back(th);
-	}
 	while (true)
 	{
-		//5.接收请求，当收到请求后，会将客户端的信息存入clientAdd这个结构体中，并返回描述这个TCP连接的Socket
-		SOCKET sockConn = Accept();
-		if (sockConn == INVALID_SOCKET)
-		{
+		sockaddr_in addr;
+		int lenth = sizeof(sockaddr_in);
+		SOCKET socket_connection = INVALID_SOCKET;
 #ifdef WIN32
-			sLog->OutBug(___F("套接字服务端监听失败,错误代码 :%d", GetLastError()));
+		socket_connection = accept(m_Socket, (sockaddr*)&addr, &lenth);
+#else
+		socket_connection = accept(m_Socket, (sockaddr*)&addr, (socklen_t *)&lenth);
 #endif
-			continue;
+		if (INVALID_SOCKET != socket_connection)
+			OnAcceptSocket(socket_connection);
+		else
+			sLog->OutWarning(___F("Socket Accept Error : %d", socket_connection));
+		/*
+		for (std::list<NetWorkRunnable<>*>::iterator i = m_Threads.begin(); i != m_Threads.end(); i++)
+		{
+
+		if (!(*i)->IsFull())
+		{
+		(*i)->InsertSocket(socket_connection);
+		#ifdef WIN32
+		struct sockaddr_in sa;
+		int len = sizeof(sa);
+		if (!getpeername(socket_connection, (sockaddr*)&sa, &len))
+		sLog->OutLog(___F("新连接接入 %d", socket_connection));
+		#endif
+		return socket_connection;
+
 		}
+		}
+		*/
 	}
-	return true;
 }
 
 bool SocketServer::Lisiten()
@@ -101,41 +114,6 @@ int SocketServer::GetThreadCount()
 	return (FD_SETSIZE / SocketForSingleThread);
 }
 
-SOCKET SocketServer::Accept()
-{
-	sockaddr_in addr;
-	int lenth = sizeof(sockaddr_in);
-	SOCKET socket_connection = INVALID_SOCKET;
-#ifdef WIN32
-	socket_connection = accept(m_Socket, (sockaddr*)&addr, &lenth);
-#else
-	socket_connection = accept(m_Socket, (sockaddr*)&addr, (socklen_t *)&lenth);
-#endif
-	if (INVALID_SOCKET == socket_connection)
-	{
-		//...
-	}
-	else
-	{
-		for (std::list<NetWorkRunnable*>::iterator i = m_Threads.begin(); i != m_Threads.end(); i++)
-		{
-
-			if (!(*i)->IsFull())
-			{
-				(*i)->InsertSocket(socket_connection);
-#ifdef WIN32
-				struct sockaddr_in sa;
-				int len = sizeof(sa);
-				if (!getpeername(socket_connection, (sockaddr*)&sa, &len))
-					sLog->OutLog(___F("新连接接入 %d", socket_connection));
-#endif
-				return socket_connection;
-				
-			}
-		}
-	}
-	return INVALID_SOCKET;
-}
 void SocketServer::CleanUpAndDelete()
 {
 #ifdef WIN32

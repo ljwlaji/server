@@ -2,27 +2,57 @@
 #include <SocketList.h>
 #include <Runnable.h>
 
-class NetWorker
+class NetWorkRunnable : public Runnable<SocketList>
 {
 public:
-	NetWorker(uint32 Page) : m_SocketList(Page), ErrorCode(0)
+	NetWorkRunnable(uint32 page) : m_SocketList(page), ErrorCode(0)
 	{
 		timeout.tv_sec = 1;
 		timeout.tv_usec = 0;
 	}
-	~NetWorker() 
+	~NetWorkRunnable()
 	{
 		m_SocketList.deleteAllSocket();
 	}
 
 	bool IsFull() { return m_SocketList.IsFull(); }
-	void InsertSocket(SOCKET s) { m_SocketList.insertSocket(s); }
-	uint32 GetPage() { return m_SocketList.GetPage(); }
-	uint32 GetConnecttionCount() 
+	void InsertSocket(SOCKET s) { return m_SocketList.insertSocket(s); }
+	virtual void Start()
 	{
-		return m_SocketList.GetSize(); 
+		Runnable::Start();
 	}
-	void OnUpdate(uint32 diff)
+private:
+
+	virtual void _Run()
+	{
+		std::chrono::time_point<std::chrono::high_resolution_clock> Begin = std::chrono::high_resolution_clock::now();
+		while (true)
+		{
+			if (m_IsStoped) break;
+
+			auto Diff = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - Begin);
+			m_DiffTime = Diff.count();
+			if (m_DiffTime < 16)
+				continue;
+			_Select(m_DiffTime);
+			m_UpdateCount++;
+			m_TotalDiffTime += m_DiffTime;
+			if (m_UpdateCount >= 300)
+			{
+				auto ConnecttionCount = m_SocketList.GetSize();
+				auto Page = m_SocketList.GetPage();
+				auto diff = (int)(m_TotalDiffTime / m_UpdateCount);
+				static const char* Out = "Thread <%d> Diff <%d> Connecttion <%d>";
+				if (m_SocketList.GetSize())
+					sLog->OutWarning(___F(Out, Page, diff, ConnecttionCount).c_str());
+				m_UpdateCount = 0;
+				m_TotalDiffTime = 0;
+			}
+			Begin += Diff;
+		}
+	}
+
+	void _Select(uint32 diff)
 	{
 		int ErrorCode = 0;
 		SOCKET socket = INVALID_SOCKET;
@@ -51,77 +81,12 @@ public:
 					//如果返回值表示要关闭这个连接，那么关闭它，并将它从sockeList中去掉  
 					if (ErrorCode == 0 || ErrorCode == SOCKET_ERROR)
 					{
-						sLog->OutLog(___F("关闭Socket : %d", socket));
-						#ifdef WIN32
-							closesocket(socket);
-						#else
-							close(socket);
-						#endif
-						m_SocketList.deleteSocket(socket);
+						CloseSocket(socket);
+						continue;
 					}
-					else
-					{
-						//sLog->OutLog(receBuff);
-						//printf("Thread = %d, Recv %d\n", i, ErrorCode);
-						//FOnRecvPacket(socket, receBuff);
-					}
+					OnRecvMessage(receBuff, socket);;
 				}
 			}
-		}
-	}
-private:
-	SocketList m_SocketList;
-
-	int ErrorCode = 0;
-	fd_set fdread;
-	struct timeval timeout;
-	SOCKET socket;
-};
-
-
-class NetWorkRunnable : public Runnable<NetWorker>
-{
-public:
-	NetWorkRunnable(uint32 page) : m_NetWorker(page)
-	{}
-	~NetWorkRunnable()
-	{
-
-	}
-
-	bool IsFull() { return m_NetWorker.IsFull(); }
-	void InsertSocket(SOCKET s) { return m_NetWorker.InsertSocket(s); }
-	virtual void Start()
-	{
-		Runnable::Start();
-	}
-private:
-
-	virtual void _Run()
-	{
-		std::chrono::time_point<std::chrono::high_resolution_clock> Begin = std::chrono::high_resolution_clock::now();
-		while (true)
-		{
-			if (m_IsStoped) break;
-
-			auto Diff = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - Begin);
-			m_DiffTime = Diff.count();
-			if (m_DiffTime < 16)
-				continue;
-			m_NetWorker.OnUpdate(m_DiffTime);
-			m_UpdateCount++;
-			m_TotalDiffTime += m_DiffTime;
-			if (m_UpdateCount >= 300)
-			{
-				auto ConnecttionCount = m_NetWorker.GetConnecttionCount();
-				auto Page = m_NetWorker.GetPage();
-				auto diff = (int)(m_TotalDiffTime / m_UpdateCount);
-				static const char* Out = "Thread <%d> Diff <%d> Connecttion <%d>";
-				sLog->OutWarning(___F(Out, Page, diff, ConnecttionCount).c_str());
-				m_UpdateCount = 0;
-				m_TotalDiffTime = 0;
-			}
-			Begin += Diff;
 		}
 	}
 
@@ -129,6 +94,22 @@ private:
 	{
 	}
 
+	void CloseSocket(SOCKET s)
+	{
+		m_SocketList.deleteSocket(s);
+#ifdef WIN32
+		closesocket(s);
+#else
+		close(s);
+#endif
+	}
+
+	virtual void OnRecvMessage(const char* msg, SOCKET s) = 0;
+
 private:
-	NetWorker m_NetWorker;
+	SocketList m_SocketList;
+	int ErrorCode = 0;
+	fd_set fdread;
+	struct timeval timeout;
+	SOCKET socket;
 };

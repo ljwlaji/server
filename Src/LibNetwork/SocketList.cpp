@@ -1,7 +1,5 @@
 #include <SocketList.h>
-
-
-
+#include <Log.h>
 SocketList::SocketList(unsigned char PageCount) : m_Page(PageCount), m_Size(0)
 {
 	ThreadLocker loc(ListLock);
@@ -39,7 +37,7 @@ void SocketList::deleteSocket(SOCKET s)
 		{
 			socketArray[i] = 0;
 			m_Size--;
-			//sLog->OutLog(___F("移除客户端 %d, 目前容量 %d", s, FD_SETSIZE - num));
+			sLog->OutLog(___F("移除客户端 %d, 目前容量 %d", s, SocketForSingleThread - m_Size));
 			return;
 		}
 	}

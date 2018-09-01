@@ -29,7 +29,6 @@
 #include <atomic>
 #include <mutex>
 
-class NetWorkRunnable;
 #define ThreadLocker std::lock_guard<std::mutex>
 class SocketServer
 {
@@ -39,14 +38,12 @@ public:
 
 	bool Lisiten();
 	bool Init(const char* Ip, const unsigned short Port);
-	bool Start();
-	void Run();
+	virtual void Start();
 protected:
 	int GetThreadCount();
-	SOCKET Accept();
 	virtual void OnDelete();
 	virtual void CleanUpAndDelete();
-
+	virtual void OnAcceptSocket(SOCKET s) = 0;
 
 
 private:
@@ -54,5 +51,4 @@ private:
 	unsigned long m_Ip;
 	unsigned short m_Port;
 	std::atomic<bool> m_IsBinded;
-	std::list<NetWorkRunnable*> m_Threads;
 };

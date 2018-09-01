@@ -3,8 +3,9 @@
 #include <Config.h>
 #include <iostream>
 #include <thread>
-int main()
+int test()
 {
+	/*
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();
 	Log->Start();
 
@@ -22,5 +23,6 @@ int main()
 		std::cin >> arg;
 	}
 
+	*/
 	return 0;
 }

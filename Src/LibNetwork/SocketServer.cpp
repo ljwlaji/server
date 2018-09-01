@@ -18,9 +18,10 @@ bool SocketServer::Init(const char* Ip, const unsigned short Port)
 {
 	m_Ip = Ip ? inet_addr(Ip) : INADDR_ANY;
 	m_Port = Port;
+	int err = -1;
 #ifdef WIN32
 	WSADATA data;
-	int err = WSAStartup(MAKEWORD(2, 2), &data);
+	err = WSAStartup(MAKEWORD(2, 2), &data);
 	if (err != 0)
 	{
 		throw(CREATE_EXECPTION("WSAStartUp Error"));

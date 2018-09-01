@@ -1,7 +1,12 @@
 #include <MessageBlock.h>
-#include <memory>
 #include <Execption.h>
 #include <iostream>
+//For memcpy
+#ifdef WIN32
+#include <memory>
+#else
+#include <string.h>
+#endif
 
 MessageBlock * MessageBlock::CreateBlock(const char * InBuffer, int Lenth)
 {

@@ -50,7 +50,11 @@ void SocketList::deleteAllSocket()
 	ThreadLocker loc(ListLock);
 	for (int i = 0; i < SocketForSingleThread; i++)
 	{
+#ifdef WIN32
 		closesocket(socketArray[i]);
+#else
+		close(socketArray[i]);
+#endif
 		socketArray[i] = 0;
 	}
 	m_Size = 0;

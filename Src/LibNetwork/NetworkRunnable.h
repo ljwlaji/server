@@ -52,7 +52,11 @@ public:
 					if (ErrorCode == 0 || ErrorCode == SOCKET_ERROR)
 					{
 						sLog->OutLog(___F("¹Ø±ÕSocket : %d", socket));
-						closesocket(socket);
+						#ifdef WIN32
+							closesocket(socket);
+						#else
+							close(socket);
+						#endif
 						m_SocketList.deleteSocket(socket);
 					}
 					else

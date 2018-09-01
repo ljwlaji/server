@@ -3,6 +3,9 @@
 #include <Runnable.h>
 #include <ThreadPool.h>
 #include <NetworkRunnable.h>
+#ifndef WIN32
+#include <errno.h>
+#endif
 
 SocketServer::SocketServer() : m_Socket(INVALID_SOCKET), m_Ip(0), m_Port(0), m_IsBinded(false)
 {

@@ -1,11 +1,7 @@
 #pragma once
 #include <ShareDefine.h>
 #include <chrono>
-#ifdef WIN32
 #include <thread>
-#else
-#include <pthread.h>
-#endif
 #include <Execption.h>
 #include <atomic>
 template<class T>

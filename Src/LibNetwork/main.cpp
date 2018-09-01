@@ -2,6 +2,7 @@
 #include <LogRunnable.h>
 #include <Config.h>
 #include <iostream>
+#include <thread>
 int main()
 {
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();

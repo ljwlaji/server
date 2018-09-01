@@ -2,7 +2,10 @@
 #include "Log.h"
 #include <iomanip>
 #include <fstream>
+#ifdef WIN32
 #include <Windows.h>
+#else
+#endif
 
 
 static Config* _Config = nullptr;
@@ -22,12 +25,14 @@ Config* Config::GetInstance()
 Config::Config()
 {
 	char szModuleFilePath[4096];
+#ifdef WIN32
 	int n = GetModuleFileNameA(0, szModuleFilePath, 4096);
+#else
+	getcwd(szModuleFilePath, 4096);
+#endif
 	sLog->OutBug(szModuleFilePath);
 #ifdef WIN32
 	szModuleFilePath[strrchr(szModuleFilePath, '\\') - szModuleFilePath + 1] = 0;
-#else
-	szModuleFilePath[strrchr(szModuleFilePath, '/') - szModuleFilePath + 1] = 0;
 #endif
 	WorkUrl = szModuleFilePath;
 }

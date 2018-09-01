@@ -18,7 +18,7 @@ std::string Log::format(const char* args, ...)
 	int ares = vsnprintf(szQuery, 4096, args, ap);
 	va_end(ap);
 	if (ares == -1)
-		_ASSERT(false);
+		return "No Such Args";
 	return szQuery;
 }
 

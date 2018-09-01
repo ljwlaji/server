@@ -2,7 +2,7 @@
 #include <LogRunnable.h>
 #include <Config.h>
 #include <iostream>
-void main()
+int main()
 {
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();
 	Log->Start();
@@ -20,4 +20,6 @@ void main()
 	{
 		std::cin >> arg;
 	}
+
+	return 0;
 }

@@ -58,7 +58,6 @@ void StartTask()
 
 	for (int n = 0; n < cCount; n++)
 	{
-		Sleep(1);
 		client[n]->Close();
 	}
 }

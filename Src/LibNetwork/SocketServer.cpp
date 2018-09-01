@@ -123,13 +123,13 @@ SOCKET SocketServer::Accept()
 			if (!(*i)->IsFull())
 			{
 				(*i)->InsertSocket(socket_connection);
+#ifdef WIN32
 				struct sockaddr_in sa;
 				int len = sizeof(sa);
 				if (!getpeername(socket_connection, (sockaddr*)&sa, &len))
-				{
 					sLog->OutLog(___F("新连接接入 %d", socket_connection));
-					return socket_connection;
-				}
+#endif
+				return socket_connection;
 				
 			}
 		}

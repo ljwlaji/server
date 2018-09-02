@@ -45,7 +45,7 @@ void RouterClient::Connect(const char * Ip, const unsigned short Port)
 #ifdef _WIN32
 	_sin.sin_addr.S_un.S_addr = inet_addr(Ip);
 #else
-	_sin.sin_addr.s_addr = inet_addr(ip);
+	_sin.sin_addr.s_addr = inet_addr(Ip);
 #endif
 	//printf("<socket=%d>正在连接服务器<%s:%d>...\n", _sock, ip, port);
 	int ret = connect(m_Socket, (sockaddr*)&_sin, sizeof(sockaddr_in));

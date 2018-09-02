@@ -1,1 +1,23 @@
-add_subdirectory(TcpClient)
+file(GLOB sources_localdir *.cpp *.h *.hpp)
+
+set(UnitTest_SRCS
+	${sources_localdir}
+)
+
+include_directories(
+	${CMAKE_SOURCE_DIR}
+	${CMAKE_SOURCE_DIR}/Src
+	${CMAKE_SOURCE_DIR}/Src/WorldServer
+	${CMAKE_SOURCE_DIR}/Src/LibNetwork
+	${CMAKE_SOURCE_DIR}/Src/Shared
+	${MYSQL_INCLUDE_DIR}
+)
+
+add_executable(UnitTest
+	${UnitTest_SRCS}
+)
+
+target_link_libraries(UnitTest
+	LibShared
+	LibNetwork
+)

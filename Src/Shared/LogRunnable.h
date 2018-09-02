@@ -32,7 +32,7 @@ private:
 			m_TotalDiffTime += m_DiffTime;
 			if (m_UpdateCount >= 1000)
 			{
-				printf("Update Diff %d \n", (int)(m_TotalDiffTime / m_UpdateCount));
+				sLog->OutLog(___F("Update Diff %d", (int)(m_TotalDiffTime / m_UpdateCount)));
 				m_UpdateCount = 0;
 				m_TotalDiffTime = 0;
 			}

@@ -13,9 +13,9 @@ std::string Log::format(const char* args, ...)
 {
 	std::string ret = "";
 	va_list ap;
-	char szQuery[4096];
+	char szQuery[1024];
 	va_start(ap, args);
-	int ares = vsnprintf(szQuery, 4096, args, ap);
+	int ares = vsnprintf(szQuery, 1024, args, ap);
 	va_end(ap);
 	if (ares == -1)
 		return "No Such Args";
@@ -24,13 +24,8 @@ std::string Log::format(const char* args, ...)
 
 Log * Log::GetInstance()
 {
-	if (!_log)
-	{
-		ThreadLocker loc(LocInsLoc);
-		if (!_log)
-			_log = new Log();
-	}
-	return _log;
+	static Log _Log;
+	return &_Log;
 }
 
 void Log::OutBug(std::string args)

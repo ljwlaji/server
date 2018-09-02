@@ -43,9 +43,12 @@ public:
 	//Shut Down Runable
 	void Stop()
 	{
-		m_IsStoped = true;
-		Wait();
-		OnStoped();
+		if (!m_IsStoped)
+		{
+			m_IsStoped = true;
+			Wait();
+			OnStoped();
+		}
 	}
 
 private:

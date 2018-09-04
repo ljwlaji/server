@@ -7,7 +7,7 @@ class Master
 public:
 	Master();
 	~Master();
-
+	 
 private:
 
 };

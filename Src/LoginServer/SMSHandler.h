@@ -34,22 +34,13 @@ public:
 		m_Statue = SMS_STATUE_WAIT;
 		respone = request.send("GET");
 		if (respone.code == 200)
-		{
-			printf("%s", respone.body.data());
 			m_Statue = SMS_STATUE_COMPELETED;
-		}
 		else
-		{
-			printf("SMS Send Error %d", respone.code);
 			m_Statue = SMS_STATUE_FAILED;
-		}
 	}
+	uint16 GetResponeCode() { return respone.code; }
+	unsigned char* GetResponeValue() { if (respone.code == 200) return respone.body.data(); return 0; }
 private:
-	void _send()
-	{
-
-	}
-
 	SMSSTATUE m_Statue;
 	uint32 m_TimeOutTime;
 	http::Request request;

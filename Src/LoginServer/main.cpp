@@ -55,9 +55,6 @@ bool test()
 
 	std::shared_ptr<SMSRunnable> SMS = std::make_shared<SMSRunnable>();
 	SMS->Start();
-	sSMSManager->NewSMS("15677773737");
-	sSMSManager->NewSMS("15628007269");
-	sSMSManager->NewSMS("15628007289");
 
 	if (sConfig->GetBoolDefault("RouterServer.Enabled", false))
 	{

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #include <stdio.h>
 #include <Log.h>
@@ -23,9 +22,6 @@ public:
 
 	void Out()
 	{
-		//char msg[2048];
-		//snprintf(msg, 2048, "%s, %s, %s, %d, %s", m_Date.c_str(), m_ExecptionDesc.c_str(), m_FileName.c_str(), m_Line, m_Function.c_str());
-		//sLog->OutExecption(msg);
 		sLog->OutExecption(___F("%s Catched Execption:\n<%s>\n In %s:%d:\nMethod: %s", m_Date.c_str(), m_ExecptionDesc.c_str(), m_FileName.c_str(), m_Line, m_Function.c_str()));
 	}
 private:

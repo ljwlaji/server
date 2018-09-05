@@ -1,8 +1,5 @@
 #include "Execption.h"
 
-#include <cstdio>
-#include <cstdlib>
-#include <thread>
 #include <cstdarg>
 
 void Execption::Assert(char const * file, int line, char const * function, char const * message)

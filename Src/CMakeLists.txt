@@ -6,10 +6,6 @@ if (WIN32)
       ${CMAKE_SOURCE_DIR}/Src/Shared/WheatyExceptionReport.cpp
       ${CMAKE_SOURCE_DIR}/Src/Shared/WheatyExceptionReport.h
     )
-else(WIN32)
-  if (UNIX)
-      set(sources_Debugging ${CMAKE_SOURCE_DIR}/Src/Shared/UnixDebugger.cpp)
-  endif (UNIX)
 endif(WIN32)
 
 add_subdirectory(LibNetwork)

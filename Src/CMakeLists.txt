@@ -8,7 +8,7 @@ if (WIN32)
     )
 else(WIN32)
   if (UNIX)
-      set(sources_Debugging ${CMAKE_SOURCE_DIR}/src/Shared/UnixDebugger.cpp)
+      set(sources_Debugging ${CMAKE_SOURCE_DIR}/Src/Shared/UnixDebugger.cpp)
   endif (UNIX)
 endif(WIN32)
 

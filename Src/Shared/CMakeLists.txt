@@ -9,7 +9,6 @@ set(Shared_SRCS
 include_directories(
 	${CMAKE_SOURCE_DIR}/Src
 	${CMAKE_SOURCE_DIR}/Src/Shared
-	${MYSQL_INCLUDE_DIR}
 )
 
 add_library(LibShared STATIC

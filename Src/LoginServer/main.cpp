@@ -6,11 +6,16 @@
 
 #include <RouterClient.h>
 #include <Execption.h>
+#include <LoginDataBase.h>
 
+#define CONFIG_FILE "LoginServer.conf"
 int main()
 {
-	if (!sConfig->SetSource("LoginServer.conf"))
+	if (!sConfig->SetSource(CONFIG_FILE))
 		return -1;
+
+	std::shared_ptr<LoginRunnable> LoginDB = std::make_shared<LoginRunnable>();
+	LoginDB->Start();
 
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();
 	Log->Start();

@@ -21,4 +21,6 @@ add_executable(UnitTest
 target_link_libraries(UnitTest
 	LibShared
 	LibNetwork
+	DataBase
+	${MYSQL_LIBRARY}
 )

@@ -40,7 +40,7 @@ public:
 	bool Init(const char* Ip, const unsigned short Port);
 	virtual void Start();
 protected:
-	int GetThreadCount();
+	virtual int GetThreadCount() = 0;
 	virtual void OnDelete();
 	virtual void CleanUpAndDelete();
 	virtual void OnAcceptSocket(SOCKET s) = 0;

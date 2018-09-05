@@ -17,25 +17,23 @@ private:
 
 #define sLoginDB LoginDataBase::GetInstance()
 
-class LoginRunnable : public Runnable<LoginDataBase>
+class LoginDBRunnable : public Runnable<LoginDataBase>
 {
 public:
-	LoginRunnable()
+	LoginDBRunnable()
 	{
 
 	}
-	~LoginRunnable()
+	~LoginDBRunnable()
 	{
 
 	}
 	virtual void Start() override
 	{
+		sLog->OutLog("Booting DataBase Service...");
 		Runnable::Start();
 	}
-	virtual void OnStoped() override
-	{
 
-	}
 private:
 	virtual void _Run() override
 	{

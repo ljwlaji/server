@@ -31,7 +31,6 @@ Config::Config()
 #else
 	getcwd(szModuleFilePath, 4096);
 #endif
-	sLog->OutBug(szModuleFilePath);
 #ifdef WIN32
 	szModuleFilePath[strrchr(szModuleFilePath, '\\') - szModuleFilePath + 1] = 0;
 #endif

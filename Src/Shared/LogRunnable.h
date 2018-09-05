@@ -12,6 +12,7 @@ public:
 
 	virtual void Start()
 	{
+		sLog->OutLog("Booting Log Service...");
 		Runnable::Start();
 	}
 private:
@@ -38,10 +39,5 @@ private:
 			}
 			Begin += Diff;
 		}
-	}
-
-	virtual void OnStoped()
-	{
-	
 	}
 };

@@ -10,11 +10,10 @@
 class DBConnecttion
 {
 public:
-	static DBConnecttion* CreateConnecttion(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd);
 	static void Test();
-	DBConnecttion(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd);
+	DBConnecttion();
 	~DBConnecttion();
-	virtual bool Connect();
+	virtual bool Connect(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd);
 	void OnUpdate(uint32 diff);
 private:
 	void Close();

@@ -2,26 +2,67 @@
 #include <LogRunnable.h>
 #include <Log.h>
 #include <Config.h>
-
-
 #include <RouterClient.h>
 #include <Execption.h>
 #include <LoginDataBase.h>
+#include <DNS.h>
+#include <SMSHandler.h>
 
 #define CONFIG_FILE "LoginServer.conf"
-int main()
-{
-	if (!sConfig->SetSource(CONFIG_FILE))
-		return -1;
+#include <iostream>
 
-	std::shared_ptr<LoginRunnable> LoginDB = std::make_shared<LoginRunnable>();
-	LoginDB->Start();
+bool test()
+{
+
+	sLog->OutSuccess(___F("%s", " *****************************************************************************"));
+	sLog->OutSuccess(___F("%s", " **                                                                         **"));
+	sLog->OutSuccess(___F("%s", " **                                                                         **"));
+	sLog->OutSuccess(___F("%s", " **       **********                   ******                               **"));
+	sLog->OutSuccess(___F("%s", " **      /**///////                   **////**                              **"));
+	sLog->OutSuccess(___F("%s", " **      /**       ** ******  *****  **    //   ******  ******  *****       **"));
+	sLog->OutSuccess(___F("%s", " **      /******* /** **//*  **///**/**        **////**//**//* **///**      **"));
+	sLog->OutSuccess(___F("%s", " **      /**////  /** /** / /*******/**       /**   /** /** / /*******      **"));
+	sLog->OutSuccess(___F("%s", " **      /**      /** /**   /**//// //**    **/**   /** /**   /**////       **"));
+	sLog->OutSuccess(___F("%s", " **      /**      /** ***   //****** //****** //****** /***   //******      **"));
+	sLog->OutSuccess(___F("%s", " **      //       //  //     //////   //////   //////  ///     //////       **"));
+	sLog->OutSuccess(___F("%s", " **                                                                         **"));
+	sLog->OutSuccess(___F("%s", " **                                                                         **"));
+	sLog->OutSuccess(___F("%s", " *****************************************************************************"));
+
+	sLog->OutSuccess(___F(""));
+
+	if (!sConfig->SetSource(CONFIG_FILE))
+		return false;
 
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();
 	Log->Start();
 
+	if (!sLoginDB->Connect())
+	{
+		ASSERT(false);
+		return false;
+	}
+
+	std::shared_ptr<LoginDBRunnable> LoginDB = std::make_shared<LoginDBRunnable>();
+	LoginDB->Start();
+
+	std::shared_ptr<DNSRunnable> DNS = nullptr;
+	if (sConfig->GetBoolDefault("DynamicIp.Enabled", false))
+	{
+		DNS = std::make_shared<DNSRunnable>();
+		DNS->Start();
+	}
+
+	std::shared_ptr<SMSRunnable> SMS = std::make_shared<SMSRunnable>();
+	SMS->Start();
+	sSMSManager->NewSMS("15677773737");
+	sSMSManager->NewSMS("15628007269");
+	sSMSManager->NewSMS("15628007289");
+
 	if (sConfig->GetBoolDefault("RouterServer.Enabled", false))
 	{
+		sLog->OutLog("RouterServer Is Enabled By Config File!");
+		sLog->OutLog("Booting Router Client...");
 		std::shared_ptr<CRouterRunnable> RouterRunnable = std::make_shared<CRouterRunnable>();
 		try
 		{
@@ -36,5 +77,16 @@ int main()
 	LoginServer* server = new LoginServer();
 	server->Init(nullptr, 9876);
 	server->Lisiten();
-	return 0;
+	server->Start();
+	std::string st;
+	std::cin >> st;
+}
+
+int main()
+{
+	test();
+	while (true)
+	{
+
+	}
 }

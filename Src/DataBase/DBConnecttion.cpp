@@ -1,12 +1,6 @@
 #include <DBConnecttion.h>
 
-DBConnecttion::DBConnecttion(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd) : 
-	m_DBHost(DBHost),
-	m_DBName(DBName), 
-	m_DBPort(Port),
-	m_UserName(UserName),
-	m_Password(Passwd),
-	m_RealConnecttion(nullptr)
+DBConnecttion::DBConnecttion() : m_RealConnecttion(nullptr)
 {
 }
 
@@ -30,27 +24,25 @@ col3 SMALLINT,\
 col4 TIMESTAMP)"
 #define INSERT_SAMPLE "INSERT INTO test_table(col1,col2,col3) VALUES(?,?,?)"
 
-DBConnecttion * DBConnecttion::CreateConnecttion(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd)
+bool DBConnecttion::Connect(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd)
 {
-	DBConnecttion* _DBConnecttion = new DBConnecttion(DBHost, Port, DBName, UserName, Passwd);
-	if (!_DBConnecttion->Connect())
-		return nullptr;
-
-	return _DBConnecttion;
-}
-
-bool DBConnecttion::Connect()
-{
-	m_RealConnecttion = mysql_init(NULL);
-	if (!m_RealConnecttion)
-		return false;
-
-	mysql_real_connect(m_RealConnecttion, "192.168.0.6", "root", "19900530Aa", "test", 0, NULL, 0);
+	MYSQL sql;
+	m_RealConnecttion = mysql_init(&sql);
 	if (!m_RealConnecttion)
 	{
+		sLog->OutBug(___F("DB Init Failed!"));
+		return false;
+	}
+
+	m_RealConnecttion = mysql_real_connect(&sql, DBHost.c_str(), UserName.c_str(), Passwd.c_str(), DBName.c_str(), Port, NULL, 0);
+	if (!m_RealConnecttion)
+	{
+		sLog->OutBug(___F("\nDataBase Failed To Connect To %s:%d<%s> Using UserName %s Password %s\n", DBHost.c_str(), Port, DBName.c_str(), UserName.c_str(), Passwd.c_str()));
 		mysql_close(m_RealConnecttion);
 		return false;
 	}
+
+	sLog->OutSuccess("Successed To Create DataBase Connecttion!");
 	return true;
 }
 

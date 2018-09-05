@@ -90,10 +90,6 @@ private:
 		}
 	}
 
-	virtual void OnStoped()
-	{
-	}
-
 	void CloseSocket(SOCKET s)
 	{
 		m_SocketList.deleteSocket(s);

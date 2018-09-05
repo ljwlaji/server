@@ -91,7 +91,3 @@ void CRouterRunnable::_Run()
 		Begin += Diff;
 	}
 }
-
-void CRouterRunnable::OnStoped()
-{
-}

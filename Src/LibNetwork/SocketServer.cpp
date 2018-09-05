@@ -53,6 +53,7 @@ bool SocketServer::Init(const char* Ip, const unsigned short Port)
 		return false;
 	}
 	m_IsBinded = true;
+	sLog->OutLog(___F("Network Serivce Bind On <%s>:%d", Ip ? Ip : "Any Ip", Port));
 	return true;
 }
 
@@ -107,11 +108,6 @@ bool SocketServer::Lisiten()
 		return false;
 	}
 	return true;
-}
-
-int SocketServer::GetThreadCount()
-{
-	return (FD_SETSIZE / SocketForSingleThread);
 }
 
 void SocketServer::CleanUpAndDelete()

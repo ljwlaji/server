@@ -12,7 +12,7 @@ public:
 	virtual void Start();
 private:
 	virtual void OnAcceptSocket(SOCKET s);
-
+	virtual int GetThreadCount() override;
 
 private:
 	typedef std::list<NetWorkService*> NetWorkPool;

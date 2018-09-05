@@ -47,13 +47,11 @@ public:
 		{
 			m_IsStoped = true;
 			Wait();
-			OnStoped();
 		}
 	}
 
 private:
 	virtual void _Run() = 0;
-	virtual void OnStoped() = 0;
 protected:
 	std::thread* m_WorkThread;
 	uint32 m_DiffTime;

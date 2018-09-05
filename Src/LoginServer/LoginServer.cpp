@@ -1,6 +1,8 @@
 #include <LoginServer.h>
 #include <NetWorkService.h>
 #include <Log.h>
+#include <Config.h>
+#include <math.h>
 
 LoginServer::LoginServer()
 {
@@ -12,12 +14,15 @@ LoginServer::~LoginServer()
 
 void LoginServer::Start()
 {
-	for (int i = 0; i < GetThreadCount(); i++)
+	uint8 ThreadCount = GetThreadCount();
+	sLog->OutLog("Creatting Network Threads...");
+	for (int i = 0; i < ThreadCount; i++)
 	{
 		NetWorkService* th = new NetWorkService(i);
 		th->Start();
 		m_Threads.push_back(th);
 	}
+	sLog->OutLog("Startting Network Service...");
 	SocketServer::Start();
 }
 
@@ -37,4 +42,13 @@ void LoginServer::OnAcceptSocket(SOCKET s)
 			return;
 		}
 	}
+}
+
+int LoginServer::GetThreadCount()
+{
+	uint16 MaxSessionCount = sConfig->GetIntDefault("Server.AllowMaxSeeionCount", 1024);
+	int ThreadCount = ceil((float)MaxSessionCount / (float)SocketForSingleThread);
+	sLog->OutLog(___F("Allowed Max Connecttion Count %d", MaxSessionCount));
+	sLog->OutLog(___F("Network Thread Count %d", ThreadCount));
+	return ThreadCount;
 }

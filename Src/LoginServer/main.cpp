@@ -3,7 +3,7 @@
 #include <Log.h>
 #include <Config.h>
 
-#include <Master.h>
+
 #include <RouterClient.h>
 #include <Execption.h>
 
@@ -14,9 +14,6 @@ int main()
 
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();
 	Log->Start();
-
-	std::shared_ptr<MasterRunnable> MR = std::make_shared<MasterRunnable>();
-	MR->Start();
 
 	if (sConfig->GetBoolDefault("RouterServer.Enabled", false))
 	{

@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-void main()
+void jsonTest()
 {
 	Json::Value root;  // 表示整个 json 对象
 	root["platenumber"] = Json::Value("value_string");

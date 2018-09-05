@@ -18,6 +18,9 @@ public:
 	}
 	~Execption() {}
 
+	static void Assert(char const* file, int line, char const* function, char const* message);
+	static void Assert(char const* file, int line, char const* function, char const* message, char const* format, ...);
+
 	void Out()
 	{
 		//char msg[2048];
@@ -32,3 +35,6 @@ private:
 	std::string m_Date;
 	std::string m_Function;
 };
+
+#define WPAssert(cond, ...) do { if (!(cond)) Execption::Assert(__FILE__, __LINE__, __FUNCTION__, #cond, ##__VA_ARGS__); } while(0)
+#define ASSERT WPAssert

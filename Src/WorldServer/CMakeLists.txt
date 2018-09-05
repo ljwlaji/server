@@ -3,6 +3,7 @@ file(GLOB sources_localdir *.cpp *.h)
 
 set(WorldServer_SRCS
 	${sources_localdir}
+	${sources_Debugging}
 )
 
 include_directories(

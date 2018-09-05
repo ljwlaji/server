@@ -2,6 +2,7 @@ file(GLOB sources_localdir *.cpp *.h *.hpp)
 
 set(UnitTest_SRCS
 	${sources_localdir}
+	${sources_Debugging}
 )
 
 include_directories(

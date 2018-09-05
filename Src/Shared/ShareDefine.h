@@ -11,12 +11,6 @@ typedef unsigned __int32   uint32;
 typedef unsigned __int16   uint16;
 typedef unsigned __int8    uint8;
 #else
-#include <stdint.h>
-#ifndef uint64_t
-#ifdef __linux__
-#include <linux/types.h>
-#endif
-#endif
 typedef int64_t            int64;
 typedef int32_t            int32;
 typedef int16_t            int16;

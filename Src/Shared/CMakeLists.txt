@@ -5,8 +5,8 @@ file(GLOB sources_db 				DB/*.cpp DB/*.h)
 
 set(Shared_SRCS
 	${sources_localdir}
-	${sources_json}
-	${sources_json_include}
+	#${sources_json}
+	#${sources_json_include}
 	${sources_db}
 )
 

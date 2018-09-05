@@ -1,8 +1,10 @@
 #pragma once
 #include <ShareDefine.h>
 #include <string>
-
-
+#ifdef WIN32
+#include <Windows.h>
+#endif
+#include <mysql.h>
 class DBConnecttion
 {
 public:

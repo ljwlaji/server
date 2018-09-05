@@ -13,7 +13,7 @@ typedef unsigned __int8    uint8;
 #else
 #include <stdint.h>
 #ifndef uint64_t
-#include <linux/types.h>
+#include <sys/types.h>
 #endif
 typedef int64_t            int64;
 typedef int32_t            int32;

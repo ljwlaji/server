@@ -108,7 +108,7 @@ int test()
 	return 0;
 }
 
-int tttt()
+int main()
 {
 	test();
 	std::thread t1(cmdThread);

@@ -1,5 +1,4 @@
 #pragma once
-#include <stdio.h>
 #include <Log.h>
 
 #define CREATE_EXECPTION(Desc) Execption(Desc, __FILE__, __LINE__, __DATE__, __FUNCTION__)

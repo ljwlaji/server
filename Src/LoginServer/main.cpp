@@ -1,4 +1,4 @@
-#include <LoginServer.h>
+﻿#include <LoginServer.h>
 #include <LogRunnable.h>
 #include <Log.h>
 #include <Config.h>
@@ -78,6 +78,7 @@ bool test()
 	server->Start();
 	std::string st;
 	std::cin >> st;
+	return true;
 }
 
 int main()

@@ -1,4 +1,4 @@
-#include "EasyTcpClient.hpp"
+ï»¿#include "EasyTcpClient.hpp"
 #include<thread>
 #include <future>
 #include <stdio.h>
@@ -22,11 +22,11 @@ void cmdThread()
 		if (0 == strcmp(cmdBuf, "exit"))
 		{
 			g_bRun = false;
-			printf("ÍË³öcmdThreadÏß³Ì\n");
+			printf("é€€å‡ºcmdThreadçº¿ç¨‹\n");
 			break;
 		}
 		else {
-			printf("²»Ö§³ÖµÄÃüÁî¡£\n");
+			printf("ä¸æ”¯æŒçš„å‘½ä»¤ã€‚\n");
 		}
 	}
 }

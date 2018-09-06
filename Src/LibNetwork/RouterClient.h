@@ -12,11 +12,16 @@ public:
 		static RouterClient _RouterClient;
 		return &_RouterClient;
 	}
+	bool Send(const char* Buffer, const uint32 Lenth);
 private:
 	RouterClient();
 	~RouterClient();
+
+	void ResetHeartBeat();
 	SOCKET m_Socket;
-	char m_Buffer[4096];
+	char m_RecvBuffer[4096];
+
+	uint32 m_HeartBeatTimer;
 };
 
 #define sRouterClient RouterClient::GetInstance()

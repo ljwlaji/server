@@ -21,4 +21,9 @@ private:
 	{
 		sLog->OnUpdate(diff);
 	}
+
+	virtual void OnPrintDiff(const uint32 diff) override
+	{
+		
+	}
 };

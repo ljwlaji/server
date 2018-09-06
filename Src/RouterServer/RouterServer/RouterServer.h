@@ -11,7 +11,6 @@ public:
 private:
 	virtual void OnAcceptSocket(SOCKET s);
 	virtual int GetThreadCount() override;
-
 private:
 	typedef std::list<NetWorkService*> NetWorkPool;
 	NetWorkPool m_Threads;

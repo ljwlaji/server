@@ -56,11 +56,12 @@ bool test()
 	std::shared_ptr<SMSRunnable> SMS = std::make_shared<SMSRunnable>();
 	SMS->Start();
 
+	std::shared_ptr<CRouterRunnable> RouterRunnable = nullptr;
 	if (sConfig->GetBoolDefault("RouterServer.Enabled", false))
 	{
 		sLog->OutLog("RouterServer Is Enabled By Config File!");
 		sLog->OutLog("Booting Router Client...");
-		std::shared_ptr<CRouterRunnable> RouterRunnable = std::make_shared<CRouterRunnable>();
+		RouterRunnable = std::make_shared<CRouterRunnable>();
 		try
 		{
 			RouterRunnable->Start(sConfig->GetStringDefault("RouterServer.Host", "127.0.0.1").c_str(), sConfig->GetIntDefault("RouterServer.Port", 9876));

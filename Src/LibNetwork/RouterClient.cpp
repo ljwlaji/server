@@ -1,7 +1,8 @@
 #include <RouterClient.h>
 #include <Execption.h>
+#include <Config.h>
 
-RouterClient::RouterClient() : m_Socket(INVALID_SOCKET)
+RouterClient::RouterClient() : m_Socket(INVALID_SOCKET), m_HeartBeatTimer(0)
 {
 }
 
@@ -28,7 +29,7 @@ bool RouterClient::Init()
 		throw(CREATE_EXECPTION("Socket Init Error"));
 		return false;
 	}
-
+	ResetHeartBeat();
 	return true;
 }
 
@@ -51,15 +52,44 @@ void RouterClient::Connect(const char * Ip, const unsigned short Port)
 	int ret = connect(m_Socket, (sockaddr*)&_sin, sizeof(sockaddr_in));
 	if (SOCKET_ERROR == ret)
 		throw(CREATE_EXECPTION(___F("Failed To Connect Server %s at Port %d", Ip, Port).c_str()));
+
+	int TimerOut = 1000;  //30s
+	setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&TimerOut, sizeof(int));
 }
 
 void RouterClient::OnUpdate(uint32 diff)
 {
-	int nLen = (int)recv(m_Socket, m_Buffer, 4096, 0);
-	if (nLen <= 0)
-		throw(CREATE_EXECPTION(___F("Router Client Disconnected !").c_str()));
+	if (m_HeartBeatTimer <= diff)
+	{
+		Send("1", 1);
+		sLog->OutLog("Router Client Keepping Alive...");
+	}
+	else m_HeartBeatTimer -= diff;
+
+	int nLen = recv(m_Socket, m_RecvBuffer, sizeof(m_RecvBuffer), 0);
+	if (nLen < -1)
+		return;
 }
 
+bool RouterClient::Send(const char * Buffer, const uint32 Lenth)
+{
+	bool ret = send(m_Socket, Buffer, Lenth, 0) >= 0;
+	if (!ret)
+	{
+#ifdef WIN32
+		closesocket(m_Socket);
+#else
+		close(m_Socket);
+#endif
+	}
+	ResetHeartBeat();
+	return ret;
+}
+
+void RouterClient::ResetHeartBeat()
+{
+	m_HeartBeatTimer = sConfig->GetIntDefault("RouterServer.HeartBeatTimer", 5000);
+}
 
 CRouterRunnable::CRouterRunnable()
 {
@@ -77,5 +107,5 @@ void CRouterRunnable::Start(const char * Ip, uint16 Port)
 
 void CRouterRunnable::OnUpdate(const uint32 diff)
 {
-		sRouterClient->OnUpdate(m_DiffTime);
+	sRouterClient->OnUpdate(m_DiffTime);
 }

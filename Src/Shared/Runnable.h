@@ -51,7 +51,7 @@ public:
 	}
 
 	virtual void OnUpdate(const uint32 diff) = 0;
-
+	virtual void OnPrintDiff(const uint32 diff) {}
 private:
 	virtual void _Run() final
 	{
@@ -62,12 +62,19 @@ private:
 
 			auto Diff = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - Begin);
 			m_DiffTime = Diff.count();
-			if (m_DiffTime < 16)
+			if (m_DiffTime < 15)
 			{
-				this_thread::sleep_for(std::chrono::milliseconds(16 - m_DiffTime - 1));
+				this_thread::sleep_for(std::chrono::milliseconds(15 - m_DiffTime));
 				continue;
 			}
 			OnUpdate(m_DiffTime);
+			m_TotalDiffTime += m_DiffTime;
+			if (++m_UpdateCount > 200)
+			{
+				OnPrintDiff(m_TotalDiffTime / m_UpdateCount);
+				m_TotalDiffTime = 0;
+				m_UpdateCount = 0;
+			}
 			Begin += Diff;
 		}
 	}

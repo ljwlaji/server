@@ -1,10 +1,10 @@
-#include <SocketList.h>
+ï»¿#include <SocketList.h>
 #include <Log.h>
 SocketList::SocketList(unsigned char PageCount) : m_Page(PageCount), m_Size(0)
 {
 	ThreadLocker loc(ListLock);
 	for (int i = 0; i < SocketForSingleThread; i++)
-		//ÒòÎªsocketµÄÖµÊÇÒ»¸ö·Ç¸ºÕûÊıÖµ£¬ËùÒÔ¿ÉÒÔ½«socketArray³õÊ¼»¯Îª0£¬ÈÃËüÀ´±íÊ¾Êı×éÖĞµÄÕâÒ»¸öÔªËØÓĞÃ»ÓĞ±»Ê¹ÓÃ  
+		//å› ä¸ºsocketçš„å€¼æ˜¯ä¸€ä¸ªéè´Ÿæ•´æ•°å€¼ï¼Œæ‰€ä»¥å¯ä»¥å°†socketArrayåˆå§‹åŒ–ä¸º0ï¼Œè®©å®ƒæ¥è¡¨ç¤ºæ•°ç»„ä¸­çš„è¿™ä¸€ä¸ªå…ƒç´ æœ‰æ²¡æœ‰è¢«ä½¿ç”¨  
 		socketArray[i] = 0;
 }
 
@@ -18,12 +18,12 @@ void SocketList::insertSocket(SOCKET s)
 	ThreadLocker loc(ListLock);
 	for (int i = 0; i < SocketForSingleThread; i++)
 	{
-		//Èç¹ûÄ³Ò»¸ösocketArray[i]Îª0£¬±íÊ¾ÄÄÒ»¸öÎ»¿ÉÒÔ·ÅÈësocket
+		//å¦‚æœæŸä¸€ä¸ªsocketArray[i]ä¸º0ï¼Œè¡¨ç¤ºå“ªä¸€ä¸ªä½å¯ä»¥æ”¾å…¥socket
 		if (socketArray[i] == 0)
 		{
 			socketArray[i] = s;
 			m_Size++;
-			break;//ÕâÀïÒ»¶¨Òª¼ÓÉÏbreak£¬²»È»Ò»¸ösocket»á·ÅÔÚsocketArrayµÄ¶à¸öÎ»ÖÃÉÏ  
+			break;//è¿™é‡Œä¸€å®šè¦åŠ ä¸Šbreakï¼Œä¸ç„¶ä¸€ä¸ªsocketä¼šæ”¾åœ¨socketArrayçš„å¤šä¸ªä½ç½®ä¸Š  
 		}
 	}
 }
@@ -37,7 +37,7 @@ void SocketList::deleteSocket(SOCKET s)
 		{
 			socketArray[i] = 0;
 			m_Size--;
-			sLog->OutLog(___F("ÒÆ³ı¿Í»§¶Ë %d, Ä¿Ç°ÈİÁ¿ %d", s, SocketForSingleThread - m_Size));
+			sLog->OutLog(___F("ç§»é™¤å®¢æˆ·ç«¯ %d, ç›®å‰å®¹é‡ %d", s, SocketForSingleThread - m_Size));
 			return;
 		}
 	}
@@ -61,8 +61,8 @@ void SocketList::deleteAllSocket()
 void SocketList::makefd(fd_set* fd_list)
 {
 	ThreadLocker loc(ListLock);
-	FD_ZERO(fd_list);//Ê×ÏÈ½«fd_listÇå0  
-					 //½«Ã¿Ò»¸ösocket¼ÓÈëfd_listÖĞ  
+	FD_ZERO(fd_list);//é¦–å…ˆå°†fd_listæ¸…0  
+					 //å°†æ¯ä¸€ä¸ªsocketåŠ å…¥fd_listä¸­  
 	for (int i = 0; i < SocketForSingleThread; i++)
 		if (socketArray[i]>0)
 			FD_SET(socketArray[i], fd_list);

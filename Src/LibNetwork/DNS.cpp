@@ -21,7 +21,7 @@ DNS* DNS::GetInstance()
 
 void DNS::Init()
 {
-	m_RequestUrl = sConfig->GetStringDefault("DynamicIp.UpdateUrl", "127.0.0.1");
+	m_RequestUrl = sConfig->GetStringDefault("DynamicIp.UpdateUrl", "127.0.0.1") + sConfig->GetStringDefault("DynamicIp.BindSubHostName", "login");
 	m_UpdateTimer = sConfig->GetIntDefault("DynamicIp.UpdateDiff", 300000);
 	sLog->OutLog(___F("DNS Request URL: %s", m_RequestUrl.c_str()));
 }

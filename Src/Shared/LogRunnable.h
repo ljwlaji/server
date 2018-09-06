@@ -29,14 +29,6 @@ private:
 			if (m_DiffTime < 16)
 				continue;
 			sLog->OnUpdate(m_DiffTime);
-			m_UpdateCount++;
-			m_TotalDiffTime += m_DiffTime;
-			if (m_UpdateCount >= 1000)
-			{
-				sLog->OutLog(___F("Update Diff %d", (int)(m_TotalDiffTime / m_UpdateCount)));
-				m_UpdateCount = 0;
-				m_TotalDiffTime = 0;
-			}
 			Begin += Diff;
 		}
 	}

@@ -10,7 +10,7 @@ include(CheckIncludeFiles)
 # set macro-directory
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/macros")
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-	set(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
+	set(CMAKE_CXX_FLAGS "-std=c++11 -pthread -lm")
 endif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 # set default buildoptions and print them
 include(cmake/options.cmake)

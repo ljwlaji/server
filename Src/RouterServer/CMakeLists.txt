@@ -25,4 +25,5 @@ add_executable(RouterServer
 target_link_libraries(RouterServer
 	LibShared
 	LibNetwork
+	-lm
 )

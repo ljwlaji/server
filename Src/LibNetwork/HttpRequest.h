@@ -27,6 +27,9 @@ typedef size_t ssize_t;
 #include <unistd.h>
 #include <errno.h>
 typedef int socket_t;
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET -1
+#endif
 #endif
 
 

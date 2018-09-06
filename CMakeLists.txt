@@ -16,7 +16,7 @@ endif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 include(cmake/options.cmake)
 
 find_package(MySQL REQUIRED)
-
+find_package(Jsoncpp REQUIRED)
 
 SET(EXECUTABLE_OUTPUT_PATH 	${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH 	${PROJECT_SOURCE_DIR}/bin)

@@ -29,5 +29,5 @@ public:
 
 	virtual void Start(const char* Ip, uint16 Port);
 private:
-	virtual void _Run();
+	virtual void OnUpdate(const uint32 diff);
 };

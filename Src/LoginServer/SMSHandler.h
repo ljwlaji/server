@@ -73,5 +73,5 @@ public:
 
 	virtual void Start() override;
 private:
-	virtual void _Run() override;
+	virtual void OnUpdate(const uint32 diff) override;
 };

@@ -50,8 +50,27 @@ public:
 		}
 	}
 
+	virtual void OnUpdate(const uint32 diff) = 0;
+
 private:
-	virtual void _Run() = 0;
+	virtual void _Run() final
+	{
+		std::chrono::time_point<std::chrono::high_resolution_clock> Begin = std::chrono::high_resolution_clock::now();
+		while (true)
+		{
+			if (m_IsStoped) break;
+
+			auto Diff = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - Begin);
+			m_DiffTime = Diff.count();
+			if (m_DiffTime < 16)
+			{
+				this_thread::sleep_for(std::chrono::milliseconds(16 - m_DiffTime - 1));
+				continue;
+			}
+			OnUpdate(m_DiffTime);
+			Begin += Diff;
+		}
+	}
 protected:
 	std::thread* m_WorkThread;
 	uint32 m_DiffTime;

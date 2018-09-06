@@ -23,33 +23,9 @@ public:
 	}
 private:
 
-	virtual void _Run()
+	virtual void OnUpdate(const uint32 diff)
 	{
-		std::chrono::time_point<std::chrono::high_resolution_clock> Begin = std::chrono::high_resolution_clock::now();
-		while (true)
-		{
-			if (m_IsStoped) break;
-
-			auto Diff = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - Begin);
-			m_DiffTime = Diff.count();
-			if (m_DiffTime < 16)
-				continue;
-			_Select(m_DiffTime);
-			m_UpdateCount++;
-			m_TotalDiffTime += m_DiffTime;
-			if (m_UpdateCount >= 300)
-			{
-				auto ConnecttionCount = m_SocketList.GetSize();
-				auto Page = m_SocketList.GetPage();
-				auto diff = (int)(m_TotalDiffTime / m_UpdateCount);
-				static const char* Out = "Thread <%d> Diff <%d> Connecttion <%d>";
-				if (m_SocketList.GetSize())
-					sLog->OutWarning(___F(Out, Page, diff, ConnecttionCount).c_str());
-				m_UpdateCount = 0;
-				m_TotalDiffTime = 0;
-			}
-			Begin += Diff;
-		}
+		_Select(m_DiffTime);
 	}
 
 	void _Select(uint32 diff)

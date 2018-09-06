@@ -21,8 +21,8 @@ public:
 	DNSRunnable() {}
 	~DNSRunnable() {}
 
-	virtual void OnUpdate(const uint32 diff);
-	virtual void Start();
+	virtual void OnUpdate(const uint32 diff) override;
+	virtual void Start() override;
 private:
 
 };

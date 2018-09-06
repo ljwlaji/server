@@ -34,5 +34,5 @@ public:
 
 	virtual void Start(const char* Ip, uint16 Port);
 private:
-	virtual void OnUpdate(const uint32 diff);
+	virtual void OnUpdate(const uint32 diff) override;
 };

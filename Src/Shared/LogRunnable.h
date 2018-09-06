@@ -17,7 +17,7 @@ public:
 	}
 private:
 
-	virtual void OnUpdate(const uint32 diff)
+	virtual void OnUpdate(const uint32 diff) override
 	{
 		sLog->OnUpdate(diff);
 	}

@@ -1,19 +1,21 @@
 #pragma once
-
-
+#include <ShareDefine.h>
+#include <string>
 class MessageBlock
 {
 public:
+	static MessageBlock* CreateBlock(const char* Buffer);
+	void SetCMD(uint32 Cmd)								{ m_Cmd = Cmd;			}
+	void SetSendTime(uint32 Time)						{ m_TimePoint = Time;	}
+	bool Serialize(char* Dest, uint64& Size);
+private:
+	MessageBlock();
 	~MessageBlock();
-	static MessageBlock* CreateBlock(const char* InBuffer, int Lenth);
-	int Length() { return m_Length; }
-	bool GetBuffer(char* Dest, int& DataLenth ,int& RequireLenth);
-	bool InsertBuffer(const char* Src, int DataLenth);
-	void DebugPrint();
+	void SetSize(uint64 Size)							{ m_Size = Size;		}
+	void SetBuffer(char* Buffer)						{ m_Buffer = Buffer;	}
 private:
-	MessageBlock(const char* InBuffer, int Lenth);
-
-private:
-	int m_Length;
-	char* m_Buffer;
+	uint32 m_TimePoint;
+	uint64 m_Size;
+	uint32 m_Cmd;
+	char*  m_Buffer;
 };

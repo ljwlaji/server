@@ -81,8 +81,12 @@ bool test()
 	return true;
 }
 
+#include <Zip/Zipper.h>
 int main()
 {
+	std::string Before("Before"), After("");
+	uint32 Lenth = strlen(Before.c_str());
+	Zipper::ZipFile(Before.c_str(), Lenth);
 	test();
 	while (true)
 	{

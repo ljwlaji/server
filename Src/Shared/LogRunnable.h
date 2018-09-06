@@ -10,7 +10,7 @@ public:
 		
 	}
 
-	virtual void Start()
+	virtual void Start() override
 	{
 		sLog->OutLog("Booting Log Service...");
 		Runnable::Start();

@@ -30,12 +30,19 @@ void DNS::OnUpdate(uint32 diff)
 {
 	if (m_UpdateTimer <= diff)
 	{
-		http::Request request(m_RequestUrl.c_str());
-		http::Response response = request.send("GET");
-		if (response.code == 200)
-			sLog->OutSuccess(___F("DNS Updated : %s", response.body.data()));
-		else
-			sLog->OutBug(___F("DNS Reuqested Error Code : <%d>", response.code));
+		try
+		{
+			http::Request request(m_RequestUrl.c_str());
+			http::Response response = request.send("GET");
+			if (response.code == 200)
+				sLog->OutSuccess(___F("DNS Updated : %s", response.body.data()));
+			else
+				sLog->OutBug(___F("DNS Reuqested Error Code : <%d>", response.code));
+		}
+		catch (const std::exception& e)
+		{
+			//sLog->OutExecption(e.what());
+		}
 
 		m_UpdateTimer = sConfig->GetIntDefault("DynamicIp.UpdateDiff", 300000);
 	}

@@ -33,7 +33,7 @@ void cmdThread()
 
 void StartTask()
 {
-	const int cCount = 50;
+	const int cCount = 5000;
 	EasyTcpClient* client[cCount];
 
 	for (int n = 0; n < cCount; n++)
@@ -56,13 +56,13 @@ void StartTask()
 	}
 
 	Login login;
-	strcpy(login.userName, "lyd");
-	strcpy(login.PassWord, "lydmm");
+	strcpy(login.userName, "lydlydlydlydlydlydlydlydlydlydlydlydlydlydlydlyd");
+	strcpy(login.PassWord, "lydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmmlydmm");
 	while (g_bRun)
 	{
 		for (int n = 0; n < cCount; n++)
 		{
-			client[n]->SendData(&login);
+			SendCount += client[n]->SendData(&login);
 			//client[n]->OnRun();
 		}
 	}
@@ -108,7 +108,7 @@ int test()
 	return 0;
 }
 
-int tttt()
+int asdf()
 {
 	test();
 	std::thread t1(cmdThread);

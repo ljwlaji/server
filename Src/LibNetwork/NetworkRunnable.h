@@ -37,7 +37,7 @@ private:
 		ErrorCode = select(0, &fdread, NULL, NULL, &timeout);
 		if (ErrorCode < 0)//select返回0表示超时
 		{
-			//sLog->OutLog(___F("线程 %d 暂无可用数据包接收", pList->GetPage()));
+			//sLog->OutLog(___F("线程 %d 暂无可用数据包接收", m_SocketList.GetPage()));
 			return;
 		}
 		else
@@ -57,10 +57,11 @@ private:
 					//如果返回值表示要关闭这个连接，那么关闭它，并将它从sockeList中去掉  
 					if (ErrorCode == 0 || ErrorCode == SOCKET_ERROR)
 					{
+						OnCloseSocket(socket);
 						CloseSocket(socket);
 						continue;
 					}
-					OnRecvMessage(receBuff, socket);;
+					OnRecvMessage(receBuff, socket);
 				}
 			}
 		}
@@ -77,6 +78,7 @@ private:
 	}
 
 	virtual void OnRecvMessage(const char* msg, SOCKET s) = 0;
+	virtual void OnCloseSocket(SOCKET s) = 0;
 
 private:
 	SocketList m_SocketList;

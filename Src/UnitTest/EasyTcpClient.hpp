@@ -1,6 +1,6 @@
 ﻿#ifndef _EasyTcpClient_hpp_
 #define _EasyTcpClient_hpp_
-
+static int SendCount = 0;
 #ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#include<windows.h>

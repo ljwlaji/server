@@ -13,3 +13,7 @@ NetWorkService::~NetWorkService()
 void NetWorkService::OnRecvMessage(const char * msg, SOCKET s)
 {
 }
+
+void NetWorkService::OnCloseSocket(SOCKET s)
+{
+}

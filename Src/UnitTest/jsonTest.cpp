@@ -1,9 +1,15 @@
-/*#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/json.h>
 #include <string>
 #include <iostream>
+#include <chrono>
 using namespace std;
 
-void jsonTest()
+struct MyStruct
+{
+	int i;
+};
+
+void main()
 {
 	Json::Value root;  // 表示整个 json 对象
 	root["platenumber"] = Json::Value("value_string");
@@ -28,7 +34,12 @@ void jsonTest()
 	Json::Value roota;
 	std::string jText = "{\"praenomen\":\"Gaius\",\"nomen\":\"Julius\",\"cognomen\":\"Caezar\","  
 		"\"born\":-100,\"died\":-44}";
-	if (read.parse(jText, roota))
-		cout << styled_writer.write(roota) << endl;
+
+	std::chrono::time_point<std::chrono::high_resolution_clock> Begin = std::chrono::high_resolution_clock::now();
+	for (int i = 0; i != 10000; i++)
+	{
+		read.parse(jText, roota);
+	}
+	auto Diff = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - Begin);
+	cout << Diff.count() << endl;
 }
-*/

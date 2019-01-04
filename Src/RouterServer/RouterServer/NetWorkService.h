@@ -9,4 +9,5 @@ public:
 
 private:
 	virtual void OnRecvMessage(const char* msg, SOCKET s);
+	virtual void OnCloseSocket(SOCKET s);
 };

@@ -7,6 +7,7 @@
 #include <LoginDataBase.h>
 #include <DNS.h>
 #include <SMSHandler.h>
+#include "WheatyExceptionReport.h"
 
 #define CONFIG_FILE "LoginServer.conf"
 #include <iostream>

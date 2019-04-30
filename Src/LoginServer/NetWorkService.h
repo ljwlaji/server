@@ -8,6 +8,6 @@ public:
 	~NetWorkService();
 
 private:
-	virtual void OnRecvMessage(const char* msg, SOCKET s);
+	virtual void OnRecvMessage(const char* msg, SOCKET s) override;
 	virtual void OnCloseSocket(SOCKET s) override;
 };

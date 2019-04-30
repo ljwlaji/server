@@ -5,11 +5,16 @@ project(Hans)
 include(CheckCXXSourceRuns)
 include(CheckIncludeFiles)
 
+message("Current System Name:")
+message(${CMAKE_SYSTEM_NAME})
 
 
 # set macro-directory
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/macros")
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+	set(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	message("Using “Darwin” Configs")
 	set(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
 endif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 # set default buildoptions and print them
@@ -22,3 +27,5 @@ SET(EXECUTABLE_OUTPUT_PATH 	${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH 	${PROJECT_SOURCE_DIR}/bin)
 
 add_subdirectory(Src)
+
+add_compile_options(-std=c++11)

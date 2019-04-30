@@ -35,26 +35,26 @@ private:
 		char receBuff[4096];
 		m_SocketList.makefd(&fdread);
 		ErrorCode = select(0, &fdread, NULL, NULL, &timeout);
-		if (ErrorCode < 0)//select·µ»Ø0±íÊ¾³¬Ê±
+		if (ErrorCode < 0)//selectï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½Ê¾ï¿½ï¿½Ê±
 		{
-			//sLog->OutLog(___F("Ïß³Ì %d ÔÝÎÞ¿ÉÓÃÊý¾Ý°ü½ÓÊÕ", m_SocketList.GetPage()));
+			//sLog->OutLog(___F("ï¿½ß³ï¿½ %d ï¿½ï¿½ï¿½Þ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½ï¿½", m_SocketList.GetPage()));
 			return;
 		}
 		else
 		{
-			//±éÀúsocketListÖÐµÄÃ¿Ò»¸ösocket£¬²é¿´ÄÇÐ©socketÊÇ¿É¶ÁµÄ£¬´¦Àí¿É¶ÁµÄsocket  
-			//´ÓÖÐ¶ÁÈ¡Êý¾Ýµ½»º³åÇø£¬²¢·¢ËÍÊý¾Ý¸ø¿Í»§¶Ë  
+			//ï¿½ï¿½ï¿½ï¿½socketListï¿½Ðµï¿½Ã¿Ò»ï¿½ï¿½socketï¿½ï¿½ï¿½é¿´ï¿½ï¿½Ð©socketï¿½Ç¿É¶ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½socket  
+			//ï¿½ï¿½ï¿½Ð¶ï¿½È¡ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¸ï¿½ï¿½Í»ï¿½ï¿½ï¿½  
 			for (int i = 0; i < m_SocketList.GetSize(); i++)
 			{
-				//¶ÁÈ¡ÓÐÐ§µÄsocket
+				//ï¿½ï¿½È¡ï¿½ï¿½Ð§ï¿½ï¿½socket
 				socket = m_SocketList.getSocket(i);
 				if (socket == INVALID_SOCKET)
 					break;
-				//ÅÐ¶ÏÄÄÐ©socketÊÇ¿É¶ÁµÄ£¬Èç¹ûÕâ¸ösocketÊÇ¿É¶ÁµÄ£¬´ÓËüÀïÃæ¶ÁÈ¡Êý¾Ý  
+				//ï¿½Ð¶ï¿½ï¿½ï¿½Ð©socketï¿½Ç¿É¶ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½socketï¿½Ç¿É¶ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½  
 				if (FD_ISSET(socket, &fdread))
 				{
 					ErrorCode = recv(socket, receBuff, sizeof(receBuff), 0);
-					//Èç¹û·µ»ØÖµ±íÊ¾Òª¹Ø±ÕÕâ¸öÁ¬½Ó£¬ÄÇÃ´¹Ø±ÕËü£¬²¢½«Ëü´ÓsockeListÖÐÈ¥µô  
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Ê¾Òªï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½ï¿½ï¿½Ã´ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sockeListï¿½ï¿½È¥ï¿½ï¿½  
 					if (ErrorCode == 0 || ErrorCode == SOCKET_ERROR)
 					{
 						OnCloseSocket(socket);

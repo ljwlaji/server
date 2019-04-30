@@ -5,6 +5,7 @@
 #include <RouterServer.h>
 
 #define CONFIG_FILE "RouterServer.conf"
+#define ERROR_CONFIG_FILE_NOT_FOUND -1
 int main()
 {
 	sLog->OutSuccess(___F("%s", "*******************************************************************************"));
@@ -25,7 +26,7 @@ int main()
 	sLog->OutSuccess(___F(""));
 
 	if (!sConfig->SetSource(CONFIG_FILE))
-		return false;
+		return ERROR_CONFIG_FILE_NOT_FOUND;
 
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();
 	Log->Start();

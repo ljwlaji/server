@@ -36,10 +36,7 @@ bool RouterClient::Init()
 void RouterClient::Connect(const char * Ip, const unsigned short Port)
 {
 	if (INVALID_SOCKET == m_Socket)
-	{
 		Init();
-	}
-	// 2 连接服务器 connect
 	sockaddr_in _sin = {};
 	_sin.sin_family = AF_INET;
 	_sin.sin_port = htons(Port);
@@ -48,10 +45,10 @@ void RouterClient::Connect(const char * Ip, const unsigned short Port)
 #else
 	_sin.sin_addr.s_addr = inet_addr(Ip);
 #endif
-	//printf("<socket=%d>正在连接服务器<%s:%d>...\n", _sock, ip, port);
+	sLog->OutLog(___F("SocketClientInited With PageFile <%d> \nServerIp <%s>\nPort<%d>", m_Socket, Ip, Port));
 	int ret = connect(m_Socket, (sockaddr*)&_sin, sizeof(sockaddr_in));
 	if (SOCKET_ERROR == ret)
-		throw(CREATE_EXECPTION(___F("Failed To Connect Server %s at Port %d", Ip, Port).c_str()));
+		throw(CREATE_EXECPTION(___F("Failed To Connect Router Server %s at Port %d", Ip, Port).c_str()));
 
 	int TimerOut = 1000;  //30s
 	setsockopt(m_Socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&TimerOut, sizeof(int));

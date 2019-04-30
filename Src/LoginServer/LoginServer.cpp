@@ -28,19 +28,27 @@ void LoginServer::Start()
 
 void LoginServer::OnAcceptSocket(SOCKET s)
 {
+	#ifdef WIN32
+	int len = 0;
+	#else
+	socklen_t len = 0;
+	#endif
 	for (NetWorkPool::iterator i = m_Threads.begin(); i != m_Threads.end(); i++)
 	{
 		if (!(*i)->IsFull())
 		{
 			(*i)->InsertSocket(s);
-			#ifdef WIN32
 			struct sockaddr_in sa;
 			int len = sizeof(sa);
-			if (!getpeername(s, (sockaddr*)&sa, &len))
-				sLog->OutLog(___F("新连接接入 %d", s));
+			#ifdef WIN32
+				if (!getpeername(s, (sockaddr*)&sa, &len));
+			#else
+				if (!getpeername(s, (sockaddr*)&sa, (socklen_t*)(&len)));
 			#endif
+				sLog->OutLog(___F("Client Connected %d", s));
 			return;
 		}
+		len = 0;
 	}
 }
 

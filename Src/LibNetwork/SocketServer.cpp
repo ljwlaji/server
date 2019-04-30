@@ -73,24 +73,6 @@ void SocketServer::Start()
 			OnAcceptSocket(socket_connection);
 		else
 			sLog->OutWarning(___F("Socket Accept Error : %d", socket_connection));
-		/*
-		for (std::list<NetWorkRunnable<>*>::iterator i = m_Threads.begin(); i != m_Threads.end(); i++)
-		{
-
-		if (!(*i)->IsFull())
-		{
-		(*i)->InsertSocket(socket_connection);
-		#ifdef WIN32
-		struct sockaddr_in sa;
-		int len = sizeof(sa);
-		if (!getpeername(socket_connection, (sockaddr*)&sa, &len))
-		sLog->OutLog(___F("新连接接入 %d", socket_connection));
-		#endif
-		return socket_connection;
-
-		}
-		}
-		*/
 	}
 }
 

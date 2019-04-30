@@ -11,12 +11,13 @@
 #include <string.h>
 #include <sys/socket.h>
 
+
 #define SOCKET int
 #define INVALID_SOCKET  (SOCKET)(~0)
 #define SOCKET_ERROR            (-1)
 #endif
 
-//»º³åÇø×îÐ¡µ¥Ôª´óÐ¡
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½Ôªï¿½ï¿½Ð¡
 
 #ifndef RECV_BUFF_SZIE
 #define RECV_BUFF_SZIE 102400

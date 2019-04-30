@@ -35,26 +35,18 @@ private:
 		char receBuff[4096];
 		m_SocketList.makefd(&fdread);
 		ErrorCode = select(0, &fdread, NULL, NULL, &timeout);
-		if (ErrorCode < 0)//select����0��ʾ��ʱ
-		{
-			//sLog->OutLog(___F("�߳� %d ���޿������ݰ�����", m_SocketList.GetPage()));
+		if (ErrorCode < 0)
 			return;
-		}
 		else
 		{
-			//����socketList�е�ÿһ��socket���鿴��Щsocket�ǿɶ��ģ������ɶ���socket  
-			//���ж�ȡ���ݵ������������������ݸ��ͻ���  
 			for (int i = 0; i < m_SocketList.GetSize(); i++)
 			{
-				//��ȡ��Ч��socket
 				socket = m_SocketList.getSocket(i);
 				if (socket == INVALID_SOCKET)
 					break;
-				//�ж���Щsocket�ǿɶ��ģ�������socket�ǿɶ��ģ����������ȡ����  
 				if (FD_ISSET(socket, &fdread))
 				{
 					ErrorCode = recv(socket, receBuff, sizeof(receBuff), 0);
-					//�������ֵ��ʾҪ�ر�������ӣ���ô�ر�������������sockeList��ȥ��  
 					if (ErrorCode == 0 || ErrorCode == SOCKET_ERROR)
 					{
 						OnCloseSocket(socket);

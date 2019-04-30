@@ -1,5 +1,6 @@
 #include <DBConnecttion.h>
 
+#define MAX_MYSQL_CONNECT_ERROR 5
 DBConnecttion::DBConnecttion() : m_RealConnecttion(nullptr)
 {
 }
@@ -26,22 +27,31 @@ col4 TIMESTAMP)"
 
 bool DBConnecttion::Connect(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd)
 {
-	MYSQL sql;
-	m_RealConnecttion = mysql_init(&sql);
-	if (!m_RealConnecttion)
+	MYSQL* mysqlInit;
+	char const* unix_socket = 0;
+	mysqlInit = mysql_init(NULL);
+
+	if (!mysqlInit)
 	{
-		sLog->OutBug(___F("DB Init Failed!"));
-		return false;
+		sLog->OutExecption(___F("Could not initialize Mysql connection to database `%s`", DBName.c_str()));
+        return false;
 	}
 
-	m_RealConnecttion = mysql_real_connect(&sql, DBHost.c_str(), UserName.c_str(), Passwd.c_str(), DBName.c_str(), Port, NULL, 0);
+	mysql_options(mysqlInit, MYSQL_SET_CHARSET_NAME, "utf8");
+	uint32 count = 0;
+	do 
+	{
+		sLog->OutLog(___F("Trying To Connect DB"));
+		m_RealConnecttion = mysql_real_connect(mysqlInit, DBHost.c_str(), UserName.c_str(), Passwd.c_str(), DBName.c_str(), Port, unix_socket, 0);
+		++count;
+	} while(!m_RealConnecttion && count < MAX_MYSQL_CONNECT_ERROR);
+
 	if (!m_RealConnecttion)
 	{
 		sLog->OutBug(___F("\nDataBase Failed To Connect To %s:%d<%s> Using UserName %s Password %s\n", DBHost.c_str(), Port, DBName.c_str(), UserName.c_str(), Passwd.c_str()));
 		mysql_close(m_RealConnecttion);
 		return false;
 	}
-
 	sLog->OutSuccess("Successed To Create DataBase Connecttion!");
 	return true;
 }
@@ -96,13 +106,13 @@ void DBConnecttion::Test()
 	///* (the TIMESTAMP column is not named; the server */
 	///*  sets it to the current date and time) */
 	//
-	//stmt = mysql_stmt_init(mysql);  //³õÊ¼»¯Ô¤´¦Àí»·¾³¾ä±ú  MYSQL_STMT *stmt
+	//stmt = mysql_stmt_init(mysql);  //ï¿½ï¿½Ê¼ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  MYSQL_STMT *stmt
 	//if (!stmt)
 	//{
 	//	fprintf(stderr, " mysql_stmt_init(), out of memory\n");
 	//	exit(0);
 	//}
-	//if (mysql_stmt_prepare(stmt, INSERT_SAMPLE, strlen(INSERT_SAMPLE)))  //ÏòÔ¤´¦Àí»·¾³¾ä±ústmt ÖÐÌí¼Ósql( ´øÓÐÕ¼Î»·û)
+	//if (mysql_stmt_prepare(stmt, INSERT_SAMPLE, strlen(INSERT_SAMPLE)))  //ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½stmt ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sql( ï¿½ï¿½ï¿½ï¿½Õ¼Î»ï¿½ï¿½)
 	//{
 	//	fprintf(stderr, " mysql_stmt_prepare(), INSERT failed\n");
 	//	fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
@@ -112,7 +122,7 @@ void DBConnecttion::Test()
 	//
 	///* Get the parameter count from the statement */
 	//
-	//param_count = mysql_stmt_param_count(stmt);   //»ñÈ¡sqlÓïÑÔÖÐ Õ¼Î»·û µÄ¸öÊý
+	//param_count = mysql_stmt_param_count(stmt);   //ï¿½ï¿½È¡sqlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Õ¼Î»ï¿½ï¿½ ï¿½Ä¸ï¿½ï¿½ï¿½
 	//fprintf(stdout, " total parameters in INSERT: %d\n", param_count);
 	//
 	//if (param_count != 3) /* validate parameter count */
@@ -127,33 +137,33 @@ void DBConnecttion::Test()
 	//
 	///* INTEGER PARAM */
 	///* This is a number type, so there is no need to specify buffer_length */
-	//bind[0].buffer_type = MYSQL_TYPE_LONG;  //ÉèÖÃµÚÒ»¸öÕ¼Î»·ûµÄÊôÐÔ
+	//bind[0].buffer_type = MYSQL_TYPE_LONG;  //ï¿½ï¿½ï¿½Ãµï¿½Ò»ï¿½ï¿½Õ¼Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//bind[0].buffer = (char *)&int_data;
 	//bind[0].is_null = 0;
 	//bind[0].length = 0;
 	//
 	///* STRING PARAM */
-	//bind[1].buffer_type = MYSQL_TYPE_STRING; //ÉèÖÃµÚ2¸öÕ¼Î»·ûµÄÊôÐÔ
+	//bind[1].buffer_type = MYSQL_TYPE_STRING; //ï¿½ï¿½ï¿½Ãµï¿½2ï¿½ï¿½Õ¼Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//bind[1].buffer = (char *)str_data;
 	//bind[1].buffer_length = STRING_SIZE;
 	//bind[1].is_null = 0;
 	//bind[1].length = &str_length;
 	//
 	///* SMALLINT PARAM */
-	//bind[2].buffer_type = MYSQL_TYPE_SHORT; //ÉèÖÃµÚ3¸öÕ¼Î»·ûµÄÊôÐÔ
+	//bind[2].buffer_type = MYSQL_TYPE_SHORT; //ï¿½ï¿½ï¿½Ãµï¿½3ï¿½ï¿½Õ¼Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//bind[2].buffer = (char *)&small_data;
 	//bind[2].is_null = &is_null;
 	//bind[2].length = 0;
 	//
 	///* Bind the buffers */
-	//if (mysql_stmt_bind_param(stmt, bind))  //°ÑÉèÖÃºÃµÄÊôÐÔ ¼ÓÈëÔ¤´¦Àí»·¾³stmtÖÐ
+	//if (mysql_stmt_bind_param(stmt, bind))  //ï¿½ï¿½ï¿½ï¿½ï¿½ÃºÃµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½stmtï¿½ï¿½
 	//{
 	//	fprintf(stderr, " mysql_stmt_bind_param() failed\n");
 	//	fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
 	//	exit(0);
 	//}
 	//
-	///* Specify the data values for the first row */    //×¼±¸²åÈëÊý¾Ý
+	///* Specify the data values for the first row */    //×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//int_data = 10;             /* integer */
 	//strncpy(str_data, "MySQL", STRING_SIZE); /* string  */
 	//str_length = strlen(str_data);
@@ -162,7 +172,7 @@ void DBConnecttion::Test()
 	//is_null = 1;
 	//
 	///* Execute the INSERT statement - 1*/
-	//if (mysql_stmt_execute(stmt))   //Ö´ÐÐÔ¤´¦Àí»·¾³  ²åÈëµÚÒ»Ìõ¼ÇÂ¼
+	//if (mysql_stmt_execute(stmt))   //Ö´ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼
 	//{
 	//	fprintf(stderr, " mysql_stmt_execute(), 1 failed\n");
 	//	fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
@@ -170,7 +180,7 @@ void DBConnecttion::Test()
 	//}
 	//
 	///* Get the total number of affected rows */
-	//affected_rows = mysql_stmt_affected_rows(stmt);  //»ñÈ¡ÊÜÓ°ÏìµÄÐÐÐÅÏ¢
+	//affected_rows = mysql_stmt_affected_rows(stmt);  //ï¿½ï¿½È¡ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	//fprintf(stdout, " total affected rows(insert 1): %lu\n",
 	//	(unsigned long)affected_rows);
 	//
@@ -188,7 +198,7 @@ void DBConnecttion::Test()
 	//is_null = 0;               /* reset */
 	//
 	//						   /* Execute the INSERT statement - 2*/
-	//if (mysql_stmt_execute(stmt))    //²åÈëµÚ¶þÌõ¼ÇÂ¼
+	//if (mysql_stmt_execute(stmt))    //ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
 	//{
 	//	fprintf(stderr, " mysql_stmt_execute, 2 failed\n");
 	//	fprintf(stderr, " %s\n", mysql_stmt_error(stmt));
@@ -196,7 +206,7 @@ void DBConnecttion::Test()
 	//}
 	//
 	///* Get the total rows affected */
-	//affected_rows = mysql_stmt_affected_rows(stmt); //ÓÐ»ñÈ¡ÊÜÓ°ÏìµÄÐÐ
+	//affected_rows = mysql_stmt_affected_rows(stmt); //ï¿½Ð»ï¿½È¡ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½
 	//fprintf(stdout, " total affected rows(insert 2): %lu\n",
 	//	(unsigned long)affected_rows);
 	//

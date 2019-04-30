@@ -7,12 +7,13 @@
 #include <LoginDataBase.h>
 #include <DNS.h>
 #include <SMSHandler.h>
+#ifdef WIN32
 #include "WheatyExceptionReport.h"
-
+#endif
 #define CONFIG_FILE "LoginServer.conf"
 #include <iostream>
 
-bool test()
+bool Master()
 {
 
 	sLog->OutSuccess(___F("%s", "*******************************************************************************"));
@@ -30,17 +31,20 @@ bool test()
 	sLog->OutSuccess(___F("%s", "***                                                                         ***"));
 	sLog->OutSuccess(___F("%s", "*******************************************************************************"));
 
-	sLog->OutSuccess(___F(""));
+	sLog->OutSuccess(___F("Bootting Login Server...."));
 
 	if (!sConfig->SetSource(CONFIG_FILE))
+	{
+		sLog->OutExecption(___F("Cannot Find Current Config File : <%s>", CONFIG_FILE));
 		return false;
+	}
 
 	std::shared_ptr<LogRunnable> Log = std::make_shared<LogRunnable>();
 	Log->Start();
 
 	if (!sLoginDB->Connect())
 	{
-		ASSERT(false);
+		sLog->OutExecption(___F("Failed To Connect LoginDB, Abort."));
 		return false;
 	}
 
@@ -77,9 +81,6 @@ bool test()
 	server->Init(nullptr, 9876);
 	server->Lisiten();
 	server->Start();
-	std::string st;
-	std::cin >> st;
-	return true;
 }
 
 #include <Zip/Zipper.h>
@@ -88,7 +89,7 @@ int main()
 	std::string Before("Before"), After("");
 	uint32 Lenth = strlen(Before.c_str());
 	Zipper::ZipFile(Before.c_str(), Lenth);
-	test();
+	Master();
 	while (true)
 	{
 

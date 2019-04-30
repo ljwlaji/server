@@ -1,4 +1,3 @@
-#ifdef WIN32 //This Class Will Only Function In Win32 Platform
 #ifndef _WHEATYEXCEPTIONREPORT_
 #define _WHEATYEXCEPTIONREPORT_
 
@@ -213,5 +212,3 @@ class WheatyExceptionReport
 extern WheatyExceptionReport g_WheatyExceptionReport;       //  global instance of class
 #endif                                                      // _WIN32
 #endif                                                      // _WHEATYEXCEPTIONREPORT_
-
-#endif

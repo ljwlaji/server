@@ -52,6 +52,8 @@ bool DBConnecttion::Connect(std::string DBHost, uint16 Port, std::string DBName,
 		mysql_close(m_RealConnecttion);
 		return false;
 	}
+	mysql_autocommit(m_RealConnecttion, 1);
+	mysql_set_character_set(m_RealConnecttion, "utf8");
 	sLog->OutSuccess("Successed To Create DataBase Connecttion!");
 	return true;
 }

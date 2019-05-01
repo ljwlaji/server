@@ -48,8 +48,14 @@ void SMSManager::OnUpdate(uint32 diff)
 		case SMS_STATUE_WAIT:
 			break;
 		case SMS_STATUE_COMPELETED:
+			/*
+				Remove From Queue
+			*/
 			break;
 		case SMS_STATUE_FAILED:
+			/*
+				Remove From Queue If Retry Out Of Chance
+			 */
 			break;
 		}
 	}

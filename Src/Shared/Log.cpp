@@ -45,7 +45,7 @@ void Log::OutSuccess(std::string args)
 
 void Log::OutExecption(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Pink, args));
+	m_addlist.PushBack(SignleLog(Cmd_Yellow, args));
 }
 
 void Log::OutWarning(std::string args)
@@ -97,6 +97,30 @@ void Log::SetColor(LogColor _color)
 		break;
 	case Cmd_Pink:
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_BLUE);
+		break;
+	}
+#else
+	switch (_color)
+	{
+	case Cmd_Normal:
+		std::cout << "\033[37m";
+		break;
+	case Cmd_White:
+		std::cout << "\033[37m";
+		break;
+	case Cmd_Red:
+		std::cout << "\033[31m";
+		break;
+	case Cmd_Green:
+		std::cout << "\033[32m";
+		break;
+	case Cmd_Blue:
+		std::cout << "\033[37m";
+		break;
+	case Cmd_Yellow:
+		std::cout << "\033[33m";
+		break;
+	case Cmd_Pink:
 		break;
 	}
 #endif

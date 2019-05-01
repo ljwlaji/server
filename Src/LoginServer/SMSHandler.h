@@ -32,11 +32,19 @@ public:
 			return;
 
 		m_Statue = SMS_STATUE_WAIT;
-		respone = request.send("GET");
-		if (respone.code == 200)
-			m_Statue = SMS_STATUE_COMPELETED;
-		else
+		try
+		{
+			respone = request.send("GET");
+			if (respone.code == 200)
+				m_Statue = SMS_STATUE_COMPELETED;
+			else
+				m_Statue = SMS_STATUE_FAILED;
+		}
+		catch(Execption& e)
+		{
 			m_Statue = SMS_STATUE_FAILED;
+			e.Out();
+		}
 	}
 	uint16 GetResponeCode() { return respone.code; }
 	unsigned char* GetResponeValue() { if (respone.code == 200) return respone.body.data(); return 0; }

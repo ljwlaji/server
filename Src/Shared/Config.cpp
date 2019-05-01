@@ -8,19 +8,10 @@
 #include <unistd.h>
 #endif
 
-
-static Config* _Config = nullptr;
-static mutex ConfigInstanceLoc;
-
 Config* Config::GetInstance()
 {
-	if (!_Config)
-	{
-		ThreadLocker loc(ConfigInstanceLoc);
-		if (!_Config)
-			_Config = new Config();
-	}
-	return _Config;
+	static Config _Config;
+	return &_Config;
 }
 
 Config::Config()

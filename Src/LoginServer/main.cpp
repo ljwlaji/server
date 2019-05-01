@@ -31,7 +31,7 @@ bool Master()
 	sLog->OutSuccess(___F("%s", "***                                                                         ***"));
 	sLog->OutSuccess(___F("%s", "*******************************************************************************"));
 
-	sLog->OutSuccess(___F("Bootting Login Server...."));
+	sLog->OutSuccess("");
 
 	if (!sConfig->SetSource(CONFIG_FILE))
 	{

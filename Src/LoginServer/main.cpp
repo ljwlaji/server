@@ -83,16 +83,10 @@ bool Master()
 	server->Start();
 }
 
-#include <Zip/Zipper.h>
 int main()
 {
-	std::string Before("Before"), After("");
-	uint32 Lenth = strlen(Before.c_str());
-	Zipper::ZipFile(Before.c_str(), Lenth);
+	printf("%s\n", "Startting...");
 	Master();
-	while (true)
-	{
-
-	}
+	printf("%s\n", "Exitting...");
 	return 0;
 }

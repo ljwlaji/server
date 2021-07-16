@@ -16,6 +16,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 	set(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
 elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
+	add_definitions(-std=c++0x -stdlib=libc++)
 endif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 # set default buildoptions and print them
 include(cmake/options.cmake)

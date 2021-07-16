@@ -43,8 +43,7 @@ bool DBConnecttion::Connect(std::string DBHost, uint16 Port, std::string DBName,
 	{
 		sLog->OutLog(___F("Trying To Connect DB"));
 		m_RealConnecttion = mysql_real_connect(mysqlInit, DBHost.c_str(), UserName.c_str(), Passwd.c_str(), DBName.c_str(), Port, unix_socket, 0);
-		++count;
-	} while(!m_RealConnecttion && count < MAX_MYSQL_CONNECT_ERROR);
+	} while(!m_RealConnecttion && ++count < MAX_MYSQL_CONNECT_ERROR);
 
 	if (!m_RealConnecttion)
 	{

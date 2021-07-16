@@ -6,13 +6,6 @@
 # This is A Fire-Core-Based Project #
 #####################################
 
-rm -rf build && \
-mkdir build && \
-cd build && \
-cmake ../ && \
-make && \
-cd ../bin && \
-# Run Login Server
-./LoginServer
-# Run Router Server
-# ./RouterServer
+SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
+docker run --rm -v "${SHELL_FOLDER}/workdir:/home/workdir" server_builder
+docker run --rm -it -v "${SHELL_FOLDER}/workdir:/home/workdir" server_runner

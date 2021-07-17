@@ -12,9 +12,11 @@ public:
 	{
 
 	};
+	
 	~Runnable()
 	{
-		Stop();
+		Terminate();
+		printf("%s\n", "Runnable Exited");
 	};
 
 	virtual void Start()
@@ -34,24 +36,18 @@ public:
 		}
 	}
 
-	void Wait()
+	void Terminate() final
 	{
+		if (!m_IsStoped)
+			return;
+		m_IsStoped = true;
 		m_WorkThread->join();
 		delete m_WorkThread;
 		m_WorkThread = nullptr;
 	}
-	//Shut Down Runable
-	void Stop()
-	{
-		if (!m_IsStoped)
-		{
-			m_IsStoped = true;
-			Wait();
-		}
-	}
 
 	virtual void OnUpdate(const uint32 diff) = 0;
-	virtual void OnPrintDiff(const uint32 diff) {}
+	virtual void OnPrintDiff(const uint32 /*diff*/) {}
 private:
 	virtual void _Run() final
 	{

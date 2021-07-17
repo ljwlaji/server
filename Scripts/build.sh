@@ -6,6 +6,5 @@
 # This is A Fire-Core-Based Project #
 #####################################
 
-SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
-docker run --rm -v "${SHELL_FOLDER}/../:/home/workdir" server_builder
-docker run --rm -it -v "${SHELL_FOLDER}/../:/home/workdir" server_runner
+docker build -t server_builder -f server_builder.DockerFile .
+docker build -t server_runner -f server_runner.DockerFile .

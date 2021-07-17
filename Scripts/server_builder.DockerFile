@@ -2,7 +2,7 @@ FROM ubuntu:bionic
 
 RUN apt-get update && apt-get install -y git gcc g++ clang mysql-server libmysqld-dev cmake
 
-ENTRYPOINT cd /home/workdir/prj.server && rm -rf build && \
+ENTRYPOINT cd /home/workdir && rm -rf build && \
 rm -rf bin && \
 mkdir build && \
 cd build && \

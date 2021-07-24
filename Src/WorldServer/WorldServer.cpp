@@ -17,8 +17,3 @@ void WorldServer::Start()
 void WorldServer::OnAcceptSocket(SOCKET s)
 {
 }
-
-int WorldServer::GetThreadCount()
-{
-	return 0;
-}

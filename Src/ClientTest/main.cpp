@@ -33,7 +33,7 @@ void cmdThread()
 
 void StartTask()
 {
-	const int cCount = 1;
+	const int cCount = 5;
     int sendCount = 10;
 	EasyTcpClient* client[cCount];
 

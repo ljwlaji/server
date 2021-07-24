@@ -79,11 +79,16 @@ void SocketServer::Accept()
 		socket_connection = accept(m_Socket, (sockaddr*)&addr, (socklen_t *)&lenth);
 #endif
 		if (INVALID_SOCKET == socket_connection)
-		{
 			return;
+		if (!TryInsertSocket(socket_connection))
+		{
+			#ifdef WIN32
+				closesocket(socket_connection);
+			#else
+				close(socket_connection);
+			#endif
 		}
-		TryInsertSocket(socket_connection);
-		sLog->OutLog("新Socket进入");
+		// sLog->OutLog(___F("新Socket进入 %s", inet_ntoa(addr)));
 	}
 }
 
@@ -127,80 +132,17 @@ void SocketServer::CleanZombieSockets(const uint32 diff)
 		Session* s = m_SocketList.getSession(i);
 		if (s->m_Socket == INVALID_SOCKET)
 			continue;
-		s->m_LastPackageTime += timer;	
-		if (s->m_LastPackageTime > 60000/* for 60 sec */)
+		s->m_LastPackageTime += timer;
+		if (s->m_LastPackageTime > 120000/* for 120 sec */)
 			m_SocketList.deleteSessionByIndex(i);
 	}
 	timer = 0;
 }
 
-// void SocketServer::Select()
-// {
-// 	FD_ZERO(&fdread);
-// 	//把服务器监听的socket添加到监听的文件描述符集合
-// 	FD_SET(m_Socket, &fdread);
-// 	//设置监听的最大文件描述符
-// 	int nMax_fd = nMax_fd > m_Socket ? nMax_fd : m_Socket;
-// 	for (int i = 1; i != SocketForSingleThread; ++i)
-// 	{
-// 		Session* s = m_SocketList.getSession(i);
-// 		if (s->m_Socket == INVALID_SOCKET)
-// 			continue;
-// 		FD_SET(s->m_Socket, &fdread);
-// 		nMax_fd = nMax_fd > s->m_Socket ? nMax_fd : s->m_Socket;
-// 	}
-
-// 	int res = select(nMax_fd + 1, &fdread, 0, 0, NULL);
-// 	if(-1 == res)
-// 	{
-// 		printf("select error:%m\n");
-// 		return;
-// 	}
-// 	printf("select success\n");
-// 	//判断服务器socket是否可读
-// 	if(FD_ISSET(m_Socket, &fdread))
-// 	{
-// 		//接收新的连接
-// 		int fd = accept(m_Socket, 0,0);
-// 		if(-1 == fd)
-// 		{
-// 	 		printf("accept error:%m\n");
-// 			return;
-// 		}
-// 		m_SocketList.insertSession(fd);
-// 		printf("连接成功\n");
-// 	}
-// 	for(int i = 1; i != SocketForSingleThread; ++i)
-// 	{
-// 		Session* se = m_SocketList.getSession(i);
-// 		SOCKET s = se->m_Socket;
-// 		if (s == INVALID_SOCKET) continue;
-// 		//判断客户是否可读
-// 		printf("%d\n", s);
-// 		if(FD_ISSET(s, &fdread))
-// 		{
-// 			unsigned char buf[4096] = {0};
-// 			int res = recv(s, buf, sizeof(buf), 0);
-// 			if(res > 0)
-// 			{
-// 				printf("%s : %d\n", buf, res);
-// 			}
-// 			else if(0 == res)
-// 			{
-// 				printf("客户端退出\n");
-// 			}
-// 			else
-// 			{
-// 				printf("recv error\n");
-// 			}	
-// 		}
-// 	}
-// }
-
 void SocketServer::Select()
 {
 	int ErrorCode = 0;
-	char receBuff[4096];
+	char receBuff[RECV_BUFF_SZIE];
 	FD_ZERO(&fdread);
 	FD_SET(m_Socket, &fdread);
 	m_SocketList.makefd(&fdread);
@@ -221,7 +163,6 @@ void SocketServer::Select()
 				continue;
 			if (FD_ISSET(socket, &fdread))
 			{	
-				sLog->OutLog("有东西可以收取");
 				ErrorCode = recv(socket, receBuff, sizeof(receBuff), 0);
 				if (ErrorCode == 0)
 				{
@@ -231,7 +172,6 @@ void SocketServer::Select()
 					continue;
 				}
 				OnRecvMessage(receBuff, socket, ErrorCode);
-				sLog->OutLog(___F("%s : %d", receBuff, ErrorCode));
 				s->m_LastPackageTime = 0;
 			}
 		}
@@ -269,12 +209,6 @@ void SocketServer::CleanUpAndDelete()
 #else
 #endif
 }
-
-void SocketServer::Start()
-{
-	Runnable::Start();
-}
-
 
 void SocketServer::OnDelete()
 {

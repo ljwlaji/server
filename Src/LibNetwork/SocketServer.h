@@ -3,7 +3,7 @@
 #include <SocketList.h>
 #include <Runnable.h>
 #ifndef RECV_BUFF_SZIE
-#define RECV_BUFF_SZIE 102400
+#define RECV_BUFF_SZIE 4096
 #endif // !RECV_BUFF_SZIE
 
 
@@ -23,11 +23,9 @@ public:
 	virtual void OnUpdate(const uint32 diff) override;
 	virtual bool TryInsertSocket(SOCKET s);
 	virtual void Accept();
-	virtual void Start() override;
 protected:
 	void CloseSocket(SOCKET s);
 	virtual void Select();
-	virtual int GetThreadCount() = 0;
 	virtual void OnDelete();
 	virtual void CleanUpAndDelete();
 	virtual void OnAcceptSocket(SOCKET s) = 0;

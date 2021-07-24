@@ -13,28 +13,6 @@
 #define CONFIG_FILE "LoginServer.conf"
 #include <iostream>
 
-// static uint64 GlobalNewCount = 0;
-// void* operator new(size_t size)
-// {
-// 	void* ptr = nullptr;
-// 	try
-// 	{
-// 		ptr = (void*)malloc(size);
-// 	}
-// 	catch(...)
-// 	{
-// 		ptr = nullptr;
-// 	}
-// 	printf("%d\n", ++GlobalNewCount);
-// 	return ptr;
-// }
-
-// void operator delete(void* ptr)
-// {
-// 	printf("%d\n", --GlobalNewCount);
-// 	free(ptr);
-// }
-
 bool Master()
 {
 
@@ -101,7 +79,7 @@ bool Master()
 	server->Init(sConfig->GetStringDefault("Server.Ip", "localhost").c_str(), sConfig->GetIntDefault("Server.Port", 9876));
 	server->Lisiten();
     server->Start();
-    while (1);
+    while (1) cin.get();
 }
 
 int main()

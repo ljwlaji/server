@@ -1,7 +1,7 @@
 #include <Runnable.h>
 
 
-class LogRunnable : public Runnable<Log>
+class LogRunnable : public Runnable
 {
 public:
 	LogRunnable() {}

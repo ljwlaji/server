@@ -26,7 +26,7 @@ private:
 
 #define sRouterClient RouterClient::GetInstance()
 
-class CRouterRunnable : public Runnable<RouterClient>
+class CRouterRunnable : public Runnable
 {
 public:
 	CRouterRunnable();

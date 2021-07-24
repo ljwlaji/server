@@ -15,7 +15,7 @@ private:
 
 #define sDNS DNS::GetInstance()
 
-class DNSRunnable : public Runnable<DNS>
+class DNSRunnable : public Runnable
 {
 public:
 	DNSRunnable() {}

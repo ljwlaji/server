@@ -17,7 +17,7 @@ private:
 
 #define sLoginDB LoginDataBase::GetInstance()
 
-class LoginDBRunnable : public Runnable<LoginDataBase>
+class LoginDBRunnable : public Runnable
 {
 public:
 	LoginDBRunnable()

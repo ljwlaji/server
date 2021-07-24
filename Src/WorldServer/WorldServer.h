@@ -2,7 +2,6 @@
 #include <SocketServer.h>
 #include <list>
 
-class NetWorkService;
 class WorldServer : public SocketServer
 {
 public:
@@ -15,7 +14,5 @@ private:
 	virtual int GetThreadCount() override;
 
 private:
-	typedef std::list<NetWorkService*> NetWorkPool;
-	NetWorkPool m_Threads;
 };
 

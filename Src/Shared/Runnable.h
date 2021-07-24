@@ -4,7 +4,6 @@
 #include <thread>
 #include <Execption.h>
 #include <atomic>
-template<class T>
 class Runnable
 {
 public:
@@ -23,7 +22,7 @@ public:
 	{
 		if (!m_IsStoped)
 		{
-			sLog->OutWarning("Log Service Is Already Started !");
+			sLog->OutWarning("Already Started !");
 			return;
 		}
 		m_IsStoped = false;
@@ -36,7 +35,7 @@ public:
 		}
 	}
 
-	void Terminate() final
+	virtual void Terminate() final
 	{
 		if (!m_IsStoped)
 			return;

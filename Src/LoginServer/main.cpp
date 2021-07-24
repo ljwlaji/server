@@ -1,4 +1,4 @@
-﻿#include <LoginServer.h>
+#include <LoginServer.h>
 #include <LogRunnable.h>
 #include <Log.h>
 #include <Config.h>
@@ -12,6 +12,28 @@
 #endif
 #define CONFIG_FILE "LoginServer.conf"
 #include <iostream>
+
+// static uint64 GlobalNewCount = 0;
+// void* operator new(size_t size)
+// {
+// 	void* ptr = nullptr;
+// 	try
+// 	{
+// 		ptr = (void*)malloc(size);
+// 	}
+// 	catch(...)
+// 	{
+// 		ptr = nullptr;
+// 	}
+// 	printf("%d\n", ++GlobalNewCount);
+// 	return ptr;
+// }
+
+// void operator delete(void* ptr)
+// {
+// 	printf("%d\n", --GlobalNewCount);
+// 	free(ptr);
+// }
 
 bool Master()
 {
@@ -32,7 +54,6 @@ bool Master()
 	sLog->OutSuccess(___F("%s", "*******************************************************************************"));
 
 	sLog->OutSuccess("");
-
 	if (!sConfig->SetSource(CONFIG_FILE))
 	{
 		sLog->OutExecption(___F("Cannot Find Current Config File : <%s>", CONFIG_FILE));
@@ -76,11 +97,11 @@ bool Master()
 			e.Out();
 		}
 	}
-
 	LoginServer* server = new LoginServer();
-	server->Init(nullptr, 9876);
+	server->Init(sConfig->GetStringDefault("Server.Ip", "localhost").c_str(), sConfig->GetIntDefault("Server.Port", 9876));
 	server->Lisiten();
-	server->Start();
+    server->Start();
+    while (1);
 }
 
 int main()

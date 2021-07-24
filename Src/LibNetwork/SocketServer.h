@@ -1,37 +1,18 @@
 #pragma once
-#ifdef WIN32
-#define FD_SETSIZE 5120
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <WinSock2.h>
-#pragma comment(lib, "ws2_32.lib")
-#else
-#include <unistd.h> //uni std
-#include <arpa/inet.h>
-#include <string.h>
-#include <sys/socket.h>
-
-
-#define SOCKET int
-#define INVALID_SOCKET  (SOCKET)(~0)
-#define SOCKET_ERROR            (-1)
-#endif
-
-//��������С��Ԫ��С
-
+#include <ShareDefine.h>
+#include <SocketList.h>
+#include <Runnable.h>
 #ifndef RECV_BUFF_SZIE
 #define RECV_BUFF_SZIE 102400
 #endif // !RECV_BUFF_SZIE
 
-#define SocketForSingleThread 512
 
-#include <vector>
 #include <list>
 #include <atomic>
 #include <mutex>
 
 #define ThreadLocker std::lock_guard<std::mutex>
-class SocketServer
+class SocketServer : public Runnable
 {
 public:
 	SocketServer();
@@ -39,17 +20,33 @@ public:
 
 	bool Lisiten();
 	bool Init(const char* Ip, const unsigned short Port);
-	virtual void Start();
+	virtual void OnUpdate(const uint32 diff) override;
+	virtual bool TryInsertSocket(SOCKET s);
+	virtual void Accept();
+	virtual void Start() override;
 protected:
+	void CloseSocket(SOCKET s);
+	virtual void Select();
 	virtual int GetThreadCount() = 0;
 	virtual void OnDelete();
 	virtual void CleanUpAndDelete();
 	virtual void OnAcceptSocket(SOCKET s) = 0;
-
+	void InsertSocketToList();
+	void CleanZombieSockets(const uint32 diff);
 
 private:
+	virtual void OnRecvMessage(const char* msg, SOCKET s, uint32 length) {};
+	virtual void OnCloseSocket(SOCKET s) {};
 	SOCKET m_Socket;
 	unsigned long m_Ip;
 	unsigned short m_Port;
 	std::atomic<bool> m_IsBinded;
+
+	SocketList m_SocketList;
+	int ErrorCode = 0;
+	fd_set fdread;
+	struct timeval timeout;
+	std::mutex m_SessionArrayLock; //插入或者删除Session时的锁
+	std::list<SOCKET> m_InsertQueue;
+	uint32 timer = 0;
 };

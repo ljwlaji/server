@@ -2,20 +2,19 @@
 #include <SocketServer.h>
 #include <list>
 
-class NetWorkService;
+class NetWorkRunnable;
 class LoginServer : public SocketServer
 {
 public:
 	LoginServer();
 	~LoginServer();
 
-	virtual void Start() override;
 private:
 	virtual void OnAcceptSocket(SOCKET s) override;
 	virtual int GetThreadCount() override;
 
 private:
-	typedef std::list<NetWorkService*> NetWorkPool;
+	typedef std::list<NetWorkRunnable*> NetWorkPool;
 	NetWorkPool m_Threads;
 };
 

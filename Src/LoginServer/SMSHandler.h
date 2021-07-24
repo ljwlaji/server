@@ -73,7 +73,7 @@ private:
 
 #define sSMSManager SMSManager::GetInstance()
 
-class SMSRunnable : public Runnable<SMSManager>
+class SMSRunnable : public Runnable
 {
 public:
 	SMSRunnable();

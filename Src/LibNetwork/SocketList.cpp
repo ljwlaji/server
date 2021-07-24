@@ -1,10 +1,8 @@
 ﻿#include <SocketList.h>
 #include <Log.h>
-SocketList::SocketList(unsigned char PageCount) : m_Page(PageCount), m_Size(0)
+SocketList::SocketList() : m_Size(0), m_MaxFD(0)
 {
-	ThreadLocker loc(ListLock);
-	for (int i = 0; i < SocketForSingleThread; i++)
-		socketArray[i] = 0;
+
 }
 
 bool SocketList::IsFull()
@@ -12,55 +10,69 @@ bool SocketList::IsFull()
 	return m_Size == SocketForSingleThread;
 }
 
-void SocketList::insertSocket(SOCKET s)
+bool SocketList::insertSession(SOCKET s)
 {
-	ThreadLocker loc(ListLock);
 	for (int i = 0; i < SocketForSingleThread; i++)
 	{
-		if (socketArray[i] == 0)
+		if (m_SessionArray[i].m_Socket == INVALID_SOCKET)
 		{
-			socketArray[i] = s;
+			m_MaxFD = m_MaxFD > s ? m_MaxFD : s;
+			m_SessionArray[i].m_Socket = s;
+			m_SessionArray[i].m_LastPackageTime = 0;
 			m_Size++;
-			break; 
+			sLog->OutLog(___F("makefd %d", m_MaxFD));
+			return true; 
 		}
 	}
+	return false;
 }
 
-void SocketList::deleteSocket(SOCKET s)
+bool SocketList::deleteSession(SOCKET s)
 {
-	ThreadLocker loc(ListLock);
 	for (int i = 0; i < SocketForSingleThread; i++)
 	{
-		if (socketArray[i] == s)
-		{
-			socketArray[i] = 0;
-			m_Size--;
-			sLog->OutLog(___F("移除客户端 %d, 目前容量 %d", s, SocketForSingleThread - m_Size));
-			return;
-		}
+		if (m_SessionArray[i].m_Socket == s)
+			return deleteSessionByIndex(i);
 	}
+	return false;
 }
 
-void SocketList::deleteAllSocket()
+bool SocketList::deleteSessionByIndex(uint32 index)
 {
-	ThreadLocker loc(ListLock);
+	int socket = m_SessionArray[index].m_Socket;
+	if (socket == INVALID_SOCKET)
+		return false;
+	sLog->OutLog(___F("移除客户端 %d, 目前容量 %d", m_SessionArray[index].m_Socket, SocketForSingleThread - --m_Size));
+	m_SessionArray[index].m_Socket = INVALID_SOCKET;
+	if (m_MaxFD == socket) 
+		m_MaxFD = 0;
+	for (int i = 1; i != SocketForSingleThread; ++i)
+	{
+		int soc = m_SessionArray[index].m_Socket;
+		if (soc != INVALID_SOCKET)
+			m_MaxFD = m_MaxFD > soc ? m_MaxFD : soc;
+	}
+	return true;
+}
+
+void SocketList::deleteAllSession()
+{
 	for (int i = 0; i < SocketForSingleThread; i++)
 	{
 #ifdef WIN32
-		closesocket(socketArray[i]);
+		closesocket(m_SessionArray[i].m_Socket);
 #else
-		close(socketArray[i]);
+		close(m_SessionArray[i].m_Socket);
 #endif
-		socketArray[i] = 0;
+		m_SessionArray[i].m_Socket = INVALID_SOCKET;
 	}
 	m_Size = 0;
+	m_MaxFD = 0;
 }
 
 void SocketList::makefd(fd_set* fd_list)
 {
-	ThreadLocker loc(ListLock);
-	FD_ZERO(fd_list);
 	for (int i = 0; i < SocketForSingleThread; i++)
-		if (socketArray[i]>0)
-			FD_SET(socketArray[i], fd_list);
+		if (m_SessionArray[i].m_Socket != INVALID_SOCKET)
+			FD_SET(m_SessionArray[i].m_Socket, fd_list);
 }

@@ -45,7 +45,6 @@ private:
 	Log();
 	~Log();
 	LockedList<SignleLog> m_addlist;
-#define ThreadLocker		std::lock_guard<std::mutex>
 };
 
 #endif

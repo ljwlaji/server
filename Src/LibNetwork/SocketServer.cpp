@@ -181,7 +181,7 @@ void SocketServer::Select()
 void SocketServer::OnUpdate(const uint32 diff)
 {
 	CleanZombieSockets(diff);
-	Accept();
+	// Accept();
 	InsertSocketToList();
 	Select();
 }

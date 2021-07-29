@@ -12,6 +12,8 @@ DBConnecttion::~DBConnecttion()
 
 void DBConnecttion::Close()
 {
+	if (!m_RealConnecttion)
+		return;
 	mysql_close(m_RealConnecttion);
 	m_RealConnecttion = nullptr;
 }
@@ -27,10 +29,7 @@ col4 TIMESTAMP)"
 
 bool DBConnecttion::Connect(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd)
 {
-	MYSQL* mysqlInit;
-	char const* unix_socket = 0;
-	mysqlInit = mysql_init(NULL);
-
+	MYSQL* mysqlInit = mysql_init(NULL);
 	if (!mysqlInit)
 	{
 		sLog->OutExecption(___F("Could not initialize Mysql connection to database `%s`", DBName.c_str()));
@@ -42,12 +41,12 @@ bool DBConnecttion::Connect(std::string DBHost, uint16 Port, std::string DBName,
 	do 
 	{
 		sLog->OutLog(___F("Trying To Connect DB"));
-		m_RealConnecttion = mysql_real_connect(mysqlInit, DBHost.c_str(), UserName.c_str(), Passwd.c_str(), DBName.c_str(), Port, unix_socket, 0);
+		m_RealConnecttion = mysql_real_connect(mysqlInit, DBHost.c_str(), UserName.c_str(), Passwd.c_str(), DBName.c_str(), Port, NULL, 0);
 	} while(!m_RealConnecttion && ++count < MAX_MYSQL_CONNECT_ERROR);
 
 	if (!m_RealConnecttion)
 	{
-		sLog->OutBug(___F("\nDataBase Failed To Connect To %s:%d<%s> Using UserName %s Password %s\n", DBHost.c_str(), Port, DBName.c_str(), UserName.c_str(), Passwd.c_str()));
+		sLog->OutBug(___F("\nDataBase Failed To Connect To %s:%d <%s> Using UserName %s Password %s\n", DBHost.c_str(), Port, DBName.c_str(), UserName.c_str(), Passwd.c_str()));
 		mysql_close(m_RealConnecttion);
 		return false;
 	}

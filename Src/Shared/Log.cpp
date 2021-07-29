@@ -6,9 +6,6 @@
 #endif
 #include <iostream>
 
-static Log* _log = nullptr;
-static mutex LocInsLoc;
-
 std::string Log::format(const char* args, ...)
 {
 	std::string ret = "";
@@ -30,7 +27,7 @@ Log * Log::GetInstance()
 
 void Log::OutBug(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Red, args));
+	m_addlist.PushFront(SignleLog(Cmd_Red, args));
 }
 
 void Log::OutLog(std::string args)
@@ -45,12 +42,12 @@ void Log::OutSuccess(std::string args)
 
 void Log::OutExecption(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Yellow, args));
+	m_addlist.PushFront(SignleLog(Cmd_Yellow, args));
 }
 
 void Log::OutWarning(std::string args)
 {
-	m_addlist.PushBack(SignleLog(Cmd_Yellow, args));
+	m_addlist.PushFront(SignleLog(Cmd_Yellow, args));
 }
 
 void Log::ReSetColor()
@@ -64,8 +61,7 @@ void Log::OnUpdate(uint32 diff)
 		return;
 	while (m_addlist.Size())
 	{
-		SignleLog _log;
-		m_addlist.PopNext(_log);
+		SignleLog _log = m_addlist.PopFront();
 
 		SetColor(_log.Color);
 		printf("%s\n", _log.str.c_str());

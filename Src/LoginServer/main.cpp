@@ -43,12 +43,14 @@ bool Master()
 
 	if (!sLoginDB->Connect())
 	{
-		sLog->OutExecption(___F("Failed To Connect LoginDB, Abort."));
-		return false;
+		// sLog->OutExecption(___F("Failed To Connect LoginDB, Abort."));
+		// return false;
 	}
-
-	std::shared_ptr<LoginDBRunnable> LoginDB = std::make_shared<LoginDBRunnable>();
-	LoginDB->Start();
+	else
+	{
+		std::shared_ptr<LoginDBRunnable> LoginDB = std::make_shared<LoginDBRunnable>();
+		LoginDB->Start();
+	}
 
 	std::shared_ptr<DNSRunnable> DNS = nullptr;
 	if (sConfig->GetBoolDefault("DynamicIp.Enabled", false))
@@ -79,7 +81,8 @@ bool Master()
 	server->Init(sConfig->GetStringDefault("Server.Ip", "localhost").c_str(), sConfig->GetIntDefault("Server.Port", 9876));
 	server->Lisiten();
     server->Start();
-    while (1) cin.get();
+	while (1)
+		server->Accept();
 }
 
 int main()

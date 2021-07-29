@@ -3,7 +3,6 @@
 
 #include <map>
 #include <string>
-#include <mutex>
 using namespace std;
 #define sConfig Config::GetInstance()
 class Config
@@ -23,7 +22,6 @@ private:
 private:
 	std::string WorkUrl;
 	std::map<std::string, std::string> values;
-#define ThreadLocker		std::lock_guard<std::mutex>
 };
 
 #endif

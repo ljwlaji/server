@@ -15,8 +15,8 @@ public:
 	~DBConnecttion();
 	virtual bool Connect(std::string DBHost, uint16 Port, std::string DBName, std::string UserName, std::string Passwd);
 	void OnUpdate(uint32 diff);
-private:
 	void Close();
+private:
 	uint16 m_DBPort;
 	std::string m_DBHost;
 	std::string m_DBName;

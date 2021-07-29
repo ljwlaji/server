@@ -10,6 +10,12 @@ LoginDataBase::~LoginDataBase()
 {
 }
 
+void LoginDataBase::OnUpdate(const uint32 diff)
+{
+	
+}
+
+
 bool LoginDataBase::Connect()
 {
 	uint16 Port				= sConfig->GetIntDefault("LoginDataBase.Port", 3306);

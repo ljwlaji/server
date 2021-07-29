@@ -9,60 +9,33 @@ template<class T>
 class LockedList
 {
 public:
-	//LockedQueue()
-	//{
-	//
-	//}
-	//virtual ~LockedQueue()
-	//{
-	//
-	//}
 
-	void PushFront(T& _E)
+	void PushFront(T _E)
 	{
 		std::lock_guard<std::mutex> Locker(m_Locker);
 		m_List.push_front(_E);
 	}
 
-	void PushBack(const T& _E)
+	void PushBack(T _E)
 	{
 		std::lock_guard<std::mutex> Locker(m_Locker);
 		m_List.push_back(_E);
 	}
 
-	void PopFront(T& _E)
+	T PopFront()
 	{
 		std::lock_guard<std::mutex> Locker(m_Locker);
-		m_List.pop_front(_E);
-	}
-
-	void PopBack(T& _E)
-	{
-		std::lock_guard<std::mutex> Locker(m_Locker);
-		m_List.pop_back(_E);
-	}
-
-	bool Next(T& _T)
-	{
-		std::lock_guard<std::mutex> Locker(m_Locker);
-		if (m_List.empty())
-			return false;
-
-		_T = *m_List.begin();
+		T t = *m_List.begin();
 		m_List.pop_front();
-		m_List.push_back(_T);
-		return true;
+		return t;
 	}
 
-	bool PopNext(T& _T)
+	T PopBack()
 	{
 		std::lock_guard<std::mutex> Locker(m_Locker);
-		if (m_List.empty())
-			return false;
-
-		_T = *m_List.begin();
-		m_List.pop_front();
-		return true;
+		T t = *m_List.rbegin();
+		m_List.pop_back();
+		return t;
 	}
 
 	void Lock()
@@ -77,6 +50,7 @@ public:
 
 	uint32 Size()
 	{
+		std::lock_guard<std::mutex> Locker(m_Locker);
 		return (uint32)m_List.size();
 	}
 private:

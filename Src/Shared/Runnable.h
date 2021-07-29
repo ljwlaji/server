@@ -47,6 +47,7 @@ public:
 
 	virtual void OnUpdate(const uint32 diff) = 0;
 	virtual void OnPrintDiff(const uint32 /*diff*/) {}
+	virtual void OnStop() {};
 private:
 	virtual void _Run() final
 	{

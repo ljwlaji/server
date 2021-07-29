@@ -10,6 +10,7 @@ public:
 		return &_LoginDataBase;
 	}
 	virtual bool Connect();
+	virtual void OnUpdate(const uint32 diff);
 private:
 	LoginDataBase();
 	~LoginDataBase();
@@ -32,6 +33,11 @@ public:
 	{
 		sLog->OutLog("Booting DataBase Service...");
 		Runnable::Start();
+	}
+
+	virtual void OnStop() override
+	{
+		sLoginDB->Close();
 	}
 
 private:

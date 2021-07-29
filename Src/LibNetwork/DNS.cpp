@@ -23,7 +23,7 @@ void DNS::Init()
 {
 	m_RequestUrl = sConfig->GetStringDefault("DynamicIp.UpdateUrl", "127.0.0.1") + sConfig->GetStringDefault("DynamicIp.BindSubHostName", "login");
 	m_UpdateTimer = sConfig->GetIntDefault("DynamicIp.UpdateDiff", 300000);
-	sLog->OutLog(___F("DNS Request URL: %s", m_RequestUrl.c_str()));
+	sLog->OutLog(___F("DNS Request URL: %s Update Timer %d", m_RequestUrl.c_str(), m_UpdateTimer));
 }
 
 void DNS::OnUpdate(uint32 diff)
@@ -41,7 +41,7 @@ void DNS::OnUpdate(uint32 diff)
 		}
 		catch (const std::exception& e)
 		{
-			//sLog->OutExecption(e.what());
+			sLog->OutExecption(e.what());
 		}
 
 		m_UpdateTimer = sConfig->GetIntDefault("DynamicIp.UpdateDiff", 300000);
